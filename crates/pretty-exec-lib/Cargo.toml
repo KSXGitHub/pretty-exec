@@ -1,0 +1,5 @@
+[package]
+name = "pretty-exec-lib"
+version = "0.0.0"
+authors = ["khai96_ <hvksmr1996@gmail.com>"]
+edition = "2018"
