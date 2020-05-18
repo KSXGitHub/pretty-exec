@@ -1,5 +1,9 @@
 [package]
 name = "pretty-exec-lib"
+description = "Print a command and then execute it"
 version = "0.0.0"
 authors = ["khai96_ <hvksmr1996@gmail.com>"]
+license = "MIT"
 edition = "2018"
+keywords = ["spawn", "subprocess", "command"]
+repository = "https://github.com/KSXGitHub/pretty-exec.git"
