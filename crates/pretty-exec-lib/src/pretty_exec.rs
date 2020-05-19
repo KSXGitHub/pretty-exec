@@ -9,8 +9,8 @@ pub struct PrettyExec<Program, Argument, PreLog, PostLog>
 where
     Program: AsRef<OsStr>,
     Argument: AsRef<OsStr>,
-    PreLog: Logger,
-    PostLog: Logger,
+    PreLog: Logger<Program, Argument>,
+    PostLog: Logger<Program, Argument>,
 {
     pub program: Program,
     pub arguments: Vec<Argument>,
@@ -23,8 +23,8 @@ impl<Program, Argument, PreLog, PostLog> PrettyExec<Program, Argument, PreLog, P
 where
     Program: AsRef<OsStr> + Copy,
     Argument: AsRef<OsStr> + Copy,
-    PreLog: Logger,
-    PostLog: Logger,
+    PreLog: Logger<Program, Argument>,
+    PostLog: Logger<Program, Argument>,
 {
     pub fn arg(&mut self, arg: Argument) -> &mut Self {
         self.arguments.push(arg);
@@ -39,7 +39,7 @@ where
         result
     }
 
-    pub fn set_log_before<Logger: self::Logger>(
+    pub fn set_log_before<Logger: self::Logger<Program, Argument>>(
         self,
         log_before: Logger,
     ) -> PrettyExec<Program, Argument, Logger, PostLog> {
@@ -52,7 +52,7 @@ where
         }
     }
 
-    pub fn set_log_after<Logger: self::Logger>(
+    pub fn set_log_after<Logger: self::Logger<Program, Argument>>(
         self,
         log_after: Logger,
     ) -> PrettyExec<Program, Argument, PreLog, Logger> {
