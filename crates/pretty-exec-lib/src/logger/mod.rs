@@ -1,3 +1,4 @@
+pub mod github_actions;
 pub mod nothing;
 pub mod syntax_highlight;
 
