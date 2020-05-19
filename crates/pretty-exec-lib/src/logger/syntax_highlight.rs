@@ -11,7 +11,7 @@ pub struct SyntaxHighLight<Prompt: Display> {
     long_flag: Style,
 }
 
-impl<Prompt: Display> SyntaxHighLight<Prompt> {
+impl<Prompt: Display> Logger for SyntaxHighLight<Prompt> {
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
         let mut result = String::new();
 
@@ -40,11 +40,5 @@ impl<Prompt: Display> SyntaxHighLight<Prompt> {
         }
 
         result
-    }
-}
-
-impl<Prompt: Display> Logger for SyntaxHighLight<Prompt> {
-    fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
-        println!("{}", self.fmt(program, arguments));
     }
 }
