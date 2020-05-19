@@ -3,7 +3,9 @@ use std::{env, io, process::Child};
 
 pub use std::{ffi::OsStr, process::ExitStatus};
 
-pub fn exec<Argument: AsRef<OsStr> + Copy>(arguments: &[Argument]) -> Result<ExitStatus, String> {
+pub fn exec() -> Result<ExitStatus, String> {
+    let arguments: Vec<_> = env::args().collect();
+
     let support_color = env::var("PRETTY_EXEC_NO_COLOR")
         .map(|value| value.to_lowercase() != "true")
         .unwrap_or(true);
@@ -16,12 +18,12 @@ pub fn exec<Argument: AsRef<OsStr> + Copy>(arguments: &[Argument]) -> Result<Exi
         return Err("No arguments".to_owned());
     }
 
-    let program: Argument = arguments[0];
-    let arguments: &[Argument] = &arguments[1..];
-    let mut pretty_exec = PrettyExec::<_, Argument, _, _>::new(program);
+    let program: &str = arguments[0].as_str();
+    let arguments: &[String] = &arguments[1..];
+    let mut pretty_exec = PrettyExec::new(program);
 
     for argument in arguments {
-        pretty_exec.arg(argument.to_owned());
+        pretty_exec.arg(argument);
     }
 
     let syntax_highlight = if support_color {

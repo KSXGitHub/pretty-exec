@@ -1,48 +1,43 @@
 use super::logger::{Logger, Nothing};
 use std::{
-    ffi::OsStr,
     io,
     process::{Child, Command},
 };
 
-pub struct PrettyExec<Program, Argument, PreLog, PostLog>
+pub struct PrettyExec<PreLog, PostLog>
 where
-    Program: AsRef<OsStr>,
-    Argument: AsRef<OsStr>,
     PreLog: Logger,
     PostLog: Logger,
 {
-    pub program: Program,
-    pub arguments: Vec<Argument>,
+    pub program: String,
+    pub arguments: Vec<String>,
     command: Command,
     log_before: PreLog,
     log_after: PostLog,
 }
 
-impl<Program, Argument, PreLog, PostLog> PrettyExec<Program, Argument, PreLog, PostLog>
+impl<PreLog, PostLog> PrettyExec<PreLog, PostLog>
 where
-    Program: AsRef<OsStr> + Copy,
-    Argument: AsRef<OsStr> + Copy,
     PreLog: Logger,
     PostLog: Logger,
 {
-    pub fn arg(&mut self, arg: Argument) -> &mut Self {
-        self.arguments.push(arg);
+    pub fn arg(&mut self, arg: &str) -> &mut Self {
+        self.arguments.push(arg.to_owned());
         self.command.arg(arg);
         self
     }
 
     pub fn spawn(&mut self) -> io::Result<Child> {
-        self.log_before.log(self.program, &self.arguments);
+        self.log_before.log(self.program.as_str(), &self.arguments);
         let result = self.command.spawn();
-        self.log_after.log(self.program, &self.arguments);
+        self.log_after.log(self.program.as_str(), &self.arguments);
         result
     }
 
     pub fn set_log_before<Logger: self::Logger>(
         self,
         log_before: Logger,
-    ) -> PrettyExec<Program, Argument, Logger, PostLog> {
+    ) -> PrettyExec<Logger, PostLog> {
         PrettyExec {
             program: self.program,
             arguments: self.arguments,
@@ -55,7 +50,7 @@ where
     pub fn set_log_after<Logger: self::Logger>(
         self,
         log_after: Logger,
-    ) -> PrettyExec<Program, Argument, PreLog, Logger> {
+    ) -> PrettyExec<PreLog, Logger> {
         PrettyExec {
             program: self.program,
             arguments: self.arguments,
@@ -66,14 +61,10 @@ where
     }
 }
 
-impl<Program, Argument> PrettyExec<Program, Argument, Nothing, Nothing>
-where
-    Program: AsRef<OsStr> + Copy,
-    Argument: AsRef<OsStr>,
-{
-    pub fn new(program: Program) -> Self {
+impl PrettyExec<Nothing, Nothing> {
+    pub fn new(program: &str) -> Self {
         PrettyExec {
-            program,
+            program: program.to_owned(),
             log_before: Nothing,
             log_after: Nothing,
             arguments: Vec::new(),
