@@ -57,7 +57,17 @@ impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
         for argument in arguments {
             let argument = argument.as_ref().to_string_lossy();
             let argument = if argument.starts_with("--") {
-                self.long_flag.paint(argument)
+                let segments: Vec<_> = argument.splitn(2, '=').collect();
+                match segments[..] {
+                    [_] => self.long_flag.paint(argument),
+                    [flag, val] => Style::default().paint(format!(
+                        "{flag}{eq}{val}",
+                        flag = self.long_flag.paint(flag),
+                        eq = self.argument.paint("="),
+                        val = self.argument.paint(val),
+                    )),
+                    _ => unreachable!(),
+                }
             } else if argument.starts_with('-') {
                 self.short_flag.paint(argument)
             } else {
