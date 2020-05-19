@@ -1,6 +1,6 @@
 use super::{Formatter, OsStr};
 
-pub struct GroupOpening<Fmt: Formatter>(Fmt);
+pub struct GroupOpening<Fmt: Formatter>(pub(crate) Fmt);
 impl<Fmt: Formatter> Formatter for GroupOpening<Fmt> {
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
         format!("::group::{}", self.0.fmt(program, arguments))
