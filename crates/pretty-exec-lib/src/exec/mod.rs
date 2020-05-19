@@ -14,12 +14,12 @@ pub fn exec() -> Result<ExitStatus, String> {
         .map(|value| value.to_lowercase() == "true")
         .unwrap_or(false);
 
-    if arguments.is_empty() {
+    if arguments.len() < 2 {
         return Err("No arguments".to_owned());
     }
 
-    let program: &str = arguments[0].as_str();
-    let arguments: &[String] = &arguments[1..];
+    let program: &str = arguments[1].as_str();
+    let arguments: &[String] = &arguments[2..];
     let mut pretty_exec = PrettyExec::new(program);
 
     for argument in arguments {

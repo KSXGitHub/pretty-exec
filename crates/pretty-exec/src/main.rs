@@ -6,7 +6,7 @@ fn main() {
     }) {
         Ok(status) => status,
         Err(error) => {
-            eprintln!("{}", error);
+            eprintln!("ERROR: {}", error);
             1
         }
     };
