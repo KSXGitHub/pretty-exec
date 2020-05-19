@@ -1,5 +1,5 @@
 use super::{github_actions, PrettyExec, SyntaxHighLight};
-use std::{env, io, process::Child};
+use std::{env, io};
 
 pub use std::{ffi::OsStr, process::ExitStatus};
 
@@ -32,7 +32,7 @@ pub fn exec() -> Result<ExitStatus, String> {
         SyntaxHighLight::default_colorless()
     };
 
-    let mut exec: Box<dyn FnMut() -> io::Result<Child>> = if support_github_action {
+    let mut exec: Box<dyn FnMut() -> io::Result<ExitStatus>> = if support_github_action {
         let mut pretty_exec = pretty_exec
             .set_log_before(github_actions::GroupOpening(syntax_highlight))
             .set_log_after(github_actions::GroupClosing);
@@ -42,6 +42,5 @@ pub fn exec() -> Result<ExitStatus, String> {
         Box::new(move || pretty_exec.spawn())
     };
 
-    let mut child: Child = exec().map_err(|error: io::Error| error.to_string())?;
-    child.wait().map_err(|error| error.to_string())
+    exec().map_err(|error: io::Error| error.to_string())
 }

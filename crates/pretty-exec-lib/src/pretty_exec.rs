@@ -1,7 +1,7 @@
 use super::logger::{Logger, Nothing};
 use std::{
     io,
-    process::{Child, Command},
+    process::{Command, ExitStatus},
 };
 
 pub struct PrettyExec<PreLog, PostLog>
@@ -27,9 +27,9 @@ where
         self
     }
 
-    pub fn spawn(&mut self) -> io::Result<Child> {
+    pub fn spawn(&mut self) -> io::Result<ExitStatus> {
         self.log_before.log(self.program.as_str(), &self.arguments);
-        let result = self.command.spawn();
+        let result = self.command.spawn()?.wait();
         self.log_after.log(self.program.as_str(), &self.arguments);
         result
     }
