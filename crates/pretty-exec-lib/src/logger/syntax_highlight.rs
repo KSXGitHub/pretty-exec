@@ -26,7 +26,10 @@ impl SyntaxHighLight<String> {
 
     pub fn default_color() -> Self {
         Self {
-            prompt: Color::Cyan.paint(Self::DEFAULT_PROMPT).to_string(),
+            prompt: Style::default()
+                .dimmed()
+                .paint(Self::DEFAULT_PROMPT)
+                .to_string(),
             program: Color::Green.into(),
             argument: Style::default(),
             short_flag: Color::Red.into(),
