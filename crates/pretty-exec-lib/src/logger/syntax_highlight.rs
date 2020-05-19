@@ -1,7 +1,7 @@
 use super::{Formatter, OsStr};
 use std::fmt::{Display, Write};
 
-pub use ansi_term::Style;
+pub use ansi_term::{Color, Style};
 
 pub struct SyntaxHighLight<Prompt: Display> {
     prompt: Prompt,
@@ -9,6 +9,30 @@ pub struct SyntaxHighLight<Prompt: Display> {
     argument: Style,
     short_flag: Style,
     long_flag: Style,
+}
+
+impl SyntaxHighLight<String> {
+    const DEFAULT_PROMPT: &'static str = "$";
+
+    pub fn default_colorless() -> Self {
+        Self {
+            prompt: Self::DEFAULT_PROMPT.to_owned(),
+            program: Style::default(),
+            argument: Style::default(),
+            short_flag: Style::default(),
+            long_flag: Style::default(),
+        }
+    }
+
+    pub fn default_color() -> Self {
+        Self {
+            prompt: Color::Cyan.paint(Self::DEFAULT_PROMPT).to_string(),
+            program: Color::Green.into(),
+            argument: Style::default(),
+            short_flag: Color::Red.into(),
+            long_flag: Color::Red.into(),
+        }
+    }
 }
 
 impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
