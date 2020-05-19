@@ -1,5 +1,7 @@
+pub mod nothing;
 pub mod syntax_highlight;
 
+pub use nothing::*;
 pub use std::ffi::OsStr;
 pub use syntax_highlight::*;
 
