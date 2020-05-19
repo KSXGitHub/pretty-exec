@@ -1,4 +1,4 @@
-use super::{Logger, OsStr};
+use super::{Formatter, OsStr};
 use std::fmt::{Display, Write};
 
 pub use ansi_term::Style;
@@ -11,7 +11,7 @@ pub struct SyntaxHighLight<Prompt: Display> {
     long_flag: Style,
 }
 
-impl<Prompt: Display> Logger for SyntaxHighLight<Prompt> {
+impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
         let mut result = String::new();
 
