@@ -9,8 +9,8 @@ pub struct PrettyExec<Program, Argument, PreLog, PostLog>
 where
     Program: AsRef<OsStr>,
     Argument: AsRef<OsStr>,
-    PreLog: Logger<Program, Argument>,
-    PostLog: Logger<Program, Argument>,
+    PreLog: Logger,
+    PostLog: Logger,
 {
     pub program: Program,
     pub arguments: Vec<Argument>,
@@ -23,8 +23,8 @@ impl<Program, Argument, PreLog, PostLog> PrettyExec<Program, Argument, PreLog, P
 where
     Program: AsRef<OsStr> + Copy,
     Argument: AsRef<OsStr> + Copy,
-    PreLog: Logger<Program, Argument>,
-    PostLog: Logger<Program, Argument>,
+    PreLog: Logger,
+    PostLog: Logger,
 {
     pub fn new(program: Program, log_before: PreLog, log_after: PostLog) -> Self {
         PrettyExec {

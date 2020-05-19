@@ -7,3 +7,6 @@ license = "MIT"
 edition = "2018"
 keywords = ["spawn", "subprocess", "command"]
 repository = "https://github.com/KSXGitHub/pretty-exec.git"
+
+[dependencies]
+ansi_term = "^0.12.1"
