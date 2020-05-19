@@ -31,11 +31,10 @@ pub fn exec() -> Result<ExitStatus, String> {
     } else {
         SyntaxHighLight::default_colorless()
     };
+    let mut pretty_exec = pretty_exec.set_log_before(syntax_highlight);
 
     let mut exec: Box<dyn FnMut() -> io::Result<Child>> = if support_github_action {
-        let mut pretty_exec = pretty_exec
-            .set_log_before(github_actions::GroupOpening(syntax_highlight))
-            .set_log_after(github_actions::GroupClosing);
+        let mut pretty_exec = pretty_exec.set_log_after(github_actions::GroupClosing);
         Box::new(move || pretty_exec.spawn())
     } else {
         Box::new(move || pretty_exec.spawn())
