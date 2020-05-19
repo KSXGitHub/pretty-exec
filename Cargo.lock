@@ -11,6 +11,9 @@ dependencies = [
 [[package]]
 name = "pretty-exec"
 version = "0.0.0"
+dependencies = [
+ "pretty-exec-lib 0.0.0",
+]
 
 [[package]]
 name = "pretty-exec-lib"
