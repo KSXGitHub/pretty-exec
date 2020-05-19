@@ -1,4 +1,4 @@
-use super::logger::Logger;
+use super::logger::{Logger, Nothing};
 use std::{
     ffi::OsStr,
     io,
@@ -26,16 +26,6 @@ where
     PreLog: Logger,
     PostLog: Logger,
 {
-    pub fn new(program: Program, log_before: PreLog, log_after: PostLog) -> Self {
-        PrettyExec {
-            program,
-            log_before,
-            log_after,
-            arguments: Vec::new(),
-            command: Command::new(program),
-        }
-    }
-
     pub fn arg(&mut self, arg: Argument) -> &mut Self {
         self.arguments.push(arg);
         self.command.arg(arg);
@@ -47,5 +37,47 @@ where
         let result = self.command.spawn();
         self.log_after.log(self.program, &self.arguments);
         result
+    }
+
+    pub fn set_log_before<Logger: self::Logger>(
+        self,
+        log_before: Logger,
+    ) -> PrettyExec<Program, Argument, Logger, PostLog> {
+        PrettyExec {
+            program: self.program,
+            arguments: self.arguments,
+            command: self.command,
+            log_after: self.log_after,
+            log_before,
+        }
+    }
+
+    pub fn set_log_after<Logger: self::Logger>(
+        self,
+        log_after: Logger,
+    ) -> PrettyExec<Program, Argument, PreLog, Logger> {
+        PrettyExec {
+            program: self.program,
+            arguments: self.arguments,
+            command: self.command,
+            log_before: self.log_before,
+            log_after,
+        }
+    }
+}
+
+impl<Program, Argument> PrettyExec<Program, Argument, Nothing, Nothing>
+where
+    Program: AsRef<OsStr> + Copy,
+    Argument: AsRef<OsStr>,
+{
+    pub fn new(program: Program) -> Self {
+        PrettyExec {
+            program,
+            log_before: Nothing,
+            log_after: Nothing,
+            arguments: Vec::new(),
+            command: Command::new(program),
+        }
     }
 }
