@@ -11,7 +11,7 @@ pub(crate) struct Param {
     pub support_github_action: bool,
 }
 
-pub fn main() -> Result<ExitStatus, String> {
+pub fn main() -> Result<i32, String> {
     let arguments: Vec<_> = env::args().collect();
 
     let support_color = env::var("PRETTY_EXEC_NO_COLOR")
@@ -36,5 +36,10 @@ pub fn main() -> Result<ExitStatus, String> {
         arguments,
         syntax_highlight,
         support_github_action,
+    })
+    .and_then(|status| {
+        status
+            .code()
+            .ok_or_else(|| "Failed to get status code".to_owned())
     })
 }
