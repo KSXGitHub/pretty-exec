@@ -1,4 +1,5 @@
 mod exec;
+mod print_title;
 
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use std::env;
@@ -13,6 +14,10 @@ pub(crate) struct Param {
 
 pub fn main() -> Result<i32, String> {
     let arguments: Vec<_> = env::args().collect();
+
+    let skip_exec = env::var("PRETTY_EXEC_SKIP_EXEC")
+        .map(|value| value.to_lowercase() == "true")
+        .unwrap_or(false);
 
     let support_color = env::var("PRETTY_EXEC_NO_COLOR")
         .map(|value| value.to_lowercase() != "true")
@@ -31,6 +36,15 @@ pub fn main() -> Result<i32, String> {
     } else {
         SyntaxHighLight::default_colorless()
     };
+
+    if skip_exec {
+        print_title::print_title(Param {
+            arguments,
+            syntax_highlight,
+            support_github_action,
+        });
+        return Ok(0);
+    }
 
     exec::exec(Param {
         arguments,
