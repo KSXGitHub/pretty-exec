@@ -3,7 +3,7 @@ pub mod exec;
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use std::env;
 
-pub use std::{ffi::OsStr, process::ExitStatus};
+pub use std::process::ExitStatus;
 
 pub fn main() -> Result<ExitStatus, String> {
     let arguments: Vec<_> = env::args().collect();
