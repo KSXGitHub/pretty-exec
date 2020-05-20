@@ -1,9 +1,15 @@
-pub mod exec;
+mod exec;
 
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use std::env;
 
 pub use std::process::ExitStatus;
+
+pub(crate) struct Param {
+    pub arguments: Vec<String>,
+    pub support_color: bool,
+    pub support_github_action: bool,
+}
 
 pub fn main() -> Result<ExitStatus, String> {
     let arguments: Vec<_> = env::args().collect();
@@ -20,5 +26,9 @@ pub fn main() -> Result<ExitStatus, String> {
         return Err("No arguments".to_owned());
     }
 
-    exec::exec(&arguments, support_color, support_github_action)
+    exec::exec(Param {
+        arguments,
+        support_color,
+        support_github_action,
+    })
 }

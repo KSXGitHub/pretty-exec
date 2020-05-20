@@ -1,11 +1,12 @@
-use super::{github_actions, ExitStatus, PrettyExec, SyntaxHighLight};
+use super::{github_actions, ExitStatus, Param, PrettyExec, SyntaxHighLight};
 use std::io;
 
-pub fn exec(
-    arguments: &[String],
-    support_color: bool,
-    support_github_action: bool,
-) -> Result<ExitStatus, String> {
+pub(crate) fn exec(param: Param) -> Result<ExitStatus, String> {
+    let Param {
+        arguments,
+        support_color,
+        support_github_action,
+    } = param;
     let program: &str = arguments[1].as_str();
     let arguments: &[String] = &arguments[2..];
     let mut pretty_exec = PrettyExec::new(program);
