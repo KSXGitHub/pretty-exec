@@ -7,7 +7,7 @@ pub use std::process::ExitStatus;
 
 pub(crate) struct Param {
     pub arguments: Vec<String>,
-    pub support_color: bool,
+    pub syntax_highlight: SyntaxHighLight<String>,
     pub support_github_action: bool,
 }
 
@@ -26,9 +26,15 @@ pub fn main() -> Result<ExitStatus, String> {
         return Err("No arguments".to_owned());
     }
 
+    let syntax_highlight = if support_color {
+        SyntaxHighLight::default_color()
+    } else {
+        SyntaxHighLight::default_colorless()
+    };
+
     exec::exec(Param {
         arguments,
-        support_color,
+        syntax_highlight,
         support_github_action,
     })
 }

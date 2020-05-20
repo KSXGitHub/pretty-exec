@@ -1,10 +1,10 @@
-use super::{github_actions, ExitStatus, Param, PrettyExec, SyntaxHighLight};
+use super::{github_actions, ExitStatus, Param, PrettyExec};
 use std::io;
 
 pub(crate) fn exec(param: Param) -> Result<ExitStatus, String> {
     let Param {
         arguments,
-        support_color,
+        syntax_highlight,
         support_github_action,
     } = param;
     let program: &str = arguments[1].as_str();
@@ -14,12 +14,6 @@ pub(crate) fn exec(param: Param) -> Result<ExitStatus, String> {
     for argument in arguments {
         pretty_exec.arg(argument);
     }
-
-    let syntax_highlight = if support_color {
-        SyntaxHighLight::default_color()
-    } else {
-        SyntaxHighLight::default_colorless()
-    };
 
     let mut exec: Box<dyn FnMut() -> io::Result<ExitStatus>> = if support_github_action {
         let mut pretty_exec = pretty_exec
