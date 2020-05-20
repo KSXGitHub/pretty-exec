@@ -37,21 +37,18 @@ pub fn main() -> Result<i32, String> {
         SyntaxHighLight::default_colorless()
     };
 
-    if skip_exec {
-        print_title::print_title(Param {
-            arguments,
-            syntax_highlight,
-            support_github_action,
-        });
-        return Ok(0);
-    }
-
-    exec::exec(Param {
+    let param = Param {
         arguments,
         syntax_highlight,
         support_github_action,
-    })
-    .and_then(|status| {
+    };
+
+    if skip_exec {
+        print_title::print_title(param);
+        return Ok(0);
+    }
+
+    exec::exec(param).and_then(|status| {
         status
             .code()
             .ok_or_else(|| "Failed to get status code".to_owned())
