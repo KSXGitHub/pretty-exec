@@ -1,23 +1,11 @@
-use super::{github_actions, PrettyExec, SyntaxHighLight};
-use std::{env, io};
+use super::{github_actions, ExitStatus, PrettyExec, SyntaxHighLight};
+use std::io;
 
-pub use std::{ffi::OsStr, process::ExitStatus};
-
-pub fn exec() -> Result<ExitStatus, String> {
-    let arguments: Vec<_> = env::args().collect();
-
-    let support_color = env::var("PRETTY_EXEC_NO_COLOR")
-        .map(|value| value.to_lowercase() != "true")
-        .unwrap_or(true);
-
-    let support_github_action = env::var("PRETTY_EXEC_GITHUB_ACTION")
-        .map(|value| value.to_lowercase() == "true")
-        .unwrap_or(false);
-
-    if arguments.len() < 2 {
-        return Err("No arguments".to_owned());
-    }
-
+pub fn exec(
+    arguments: &[String],
+    support_color: bool,
+    support_github_action: bool,
+) -> Result<ExitStatus, String> {
     let program: &str = arguments[1].as_str();
     let arguments: &[String] = &arguments[2..];
     let mut pretty_exec = PrettyExec::new(program);

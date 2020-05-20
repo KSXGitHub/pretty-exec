@@ -1,5 +1,5 @@
 fn main() {
-    let status = match pretty_exec_lib::exec().and_then(|status| {
+    let status = match pretty_exec_lib::main().and_then(|status| {
         status
             .code()
             .ok_or_else(|| "Failed to get status code".to_owned())
