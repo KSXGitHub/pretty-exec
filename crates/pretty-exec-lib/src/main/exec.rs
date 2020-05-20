@@ -1,7 +1,7 @@
 use super::{github_actions, ExitStatus, Param, PrettyExec};
 use std::io;
 
-pub(crate) fn exec(param: Param) -> Result<ExitStatus, String> {
+pub fn exec(param: Param) -> Result<ExitStatus, String> {
     let Param {
         arguments,
         syntax_highlight,

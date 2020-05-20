@@ -1,12 +1,12 @@
-mod exec;
-mod print_title;
+pub mod exec;
+pub mod print_title;
 
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use std::env;
 
 pub use std::process::ExitStatus;
 
-pub(crate) struct Param {
+pub struct Param {
     pub arguments: Vec<String>,
     pub syntax_highlight: SyntaxHighLight<String>,
     pub support_github_action: bool,

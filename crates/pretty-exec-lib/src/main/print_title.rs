@@ -1,7 +1,7 @@
 use super::super::*;
 use super::{github_actions, Param};
 
-pub(crate) fn print_title(param: Param) {
+pub fn print_title(param: Param) {
     let Param {
         arguments,
         syntax_highlight,
