@@ -75,6 +75,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "pretty-exec"
 version = "0.0.0"
 dependencies = [
+ "ansi_term 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "pretty-exec-lib 0.0.0",
 ]
 

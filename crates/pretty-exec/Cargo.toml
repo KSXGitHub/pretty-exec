@@ -11,3 +11,6 @@ repository = "https://github.com/KSXGitHub/pretty-exec.git"
 
 [dependencies]
 pretty-exec-lib = { path = "../pretty-exec-lib" }
+
+[dev-dependencies]
+ansi_term = "^0.12.1"
