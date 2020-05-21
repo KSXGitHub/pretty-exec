@@ -8,8 +8,10 @@ fn exe() -> Command {
     Command::new(EXE)
 }
 
-fn u8v_to_utf8(u8v: &[u8]) -> &str {
-    std::str::from_utf8(u8v).expect("convert a vector of bytes to UTF-8 string")
+fn u8v_to_utf8(u8v: &[u8]) -> String {
+    std::str::from_utf8(u8v)
+        .expect("convert a vector of bytes to UTF-8 string")
+        .replace("\r\n", "\n")
 }
 
 fn expected_colorful_title() -> String {
