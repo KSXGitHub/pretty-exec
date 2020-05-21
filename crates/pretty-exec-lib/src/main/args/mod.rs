@@ -19,7 +19,8 @@ pub struct Args {
     #[structopt(long)]
     skip_exec: bool,
 
-    /// Disable color
+    /// When to use color
+    /// [choices: auto, never, always]
     #[structopt(long, default_value = "auto")]
     color: When,
 
