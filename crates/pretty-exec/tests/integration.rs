@@ -152,3 +152,27 @@ fn default_status() {
     let status = output.status.code().unwrap();
     assert_eq!(status, 123);
 }
+
+#[test]
+fn shell_escape() {
+    let output = exe()
+        .arg("--color=never")
+        .arg("echo")
+        .arg("abc def ghi")
+        .arg("jkl mno")
+        .arg("pqrs")
+        .arg(">")
+        .arg(">>")
+        .output()
+        .unwrap();
+
+    let expected_stdout = format!(
+        "{cmd}\n{output}\n",
+        cmd = "$ echo 'abc def ghi' 'jkl mno' pqrs '>' '>>'",
+        output = "abc def ghi jkl mno pqrs > >>",
+    );
+
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(actual_stdout, expected_stdout);
+}
