@@ -7,6 +7,7 @@ pub fn exec(param: Param) -> Result<ExitStatus, String> {
         arguments,
         syntax_highlight,
         support_github_action,
+        ..
     } = param;
     let mut pretty_exec = PrettyExec::new(program);
 

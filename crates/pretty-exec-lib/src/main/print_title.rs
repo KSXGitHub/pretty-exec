@@ -7,6 +7,7 @@ pub fn print_title(param: Param) {
         arguments,
         syntax_highlight,
         support_github_action,
+        ..
     } = param;
 
     if support_github_action {

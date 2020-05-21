@@ -10,3 +10,4 @@ repository = "https://github.com/KSXGitHub/pretty-exec.git"
 
 [dependencies]
 ansi_term = "^0.12.1"
+structopt = "^0.3.14"
