@@ -40,6 +40,7 @@ impl SyntaxHighLight<String> {
 
 impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
+        use shell_escape::escape;
         let mut result = String::new();
 
         let prompt = format!("{}", self.prompt);
@@ -50,12 +51,13 @@ impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
         write!(
             result,
             "{}",
-            self.program.paint(program.as_ref().to_string_lossy())
+            self.program
+                .paint(escape(program.as_ref().to_string_lossy()))
         )
         .expect("write program name");
 
         for argument in arguments {
-            let argument = argument.as_ref().to_string_lossy();
+            let argument = escape(argument.as_ref().to_string_lossy());
             let argument = if argument.starts_with("--") {
                 let segments: Vec<_> = argument.splitn(2, '=').collect();
                 match segments[..] {
