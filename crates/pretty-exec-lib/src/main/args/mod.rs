@@ -1,3 +1,6 @@
+pub mod when;
+pub use when::*;
+
 use super::{Param, SyntaxHighLight};
 use structopt::*;
 
@@ -17,8 +20,8 @@ pub struct Args {
     skip_exec: bool,
 
     /// Disable color
-    #[structopt(long)]
-    no_color: bool,
+    #[structopt(long, default_value = "auto")]
+    color: When,
 
     /// Enable GitHub Action grouping
     #[structopt(long)]
@@ -27,7 +30,7 @@ pub struct Args {
 
 impl Args {
     pub fn syntax_highlight(&self) -> SyntaxHighLight<String> {
-        if self.no_color {
+        if self.color == When::Never {
             SyntaxHighLight::default_colorless()
         } else {
             SyntaxHighLight::default_color()
