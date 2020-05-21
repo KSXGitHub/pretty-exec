@@ -40,7 +40,7 @@ impl SyntaxHighLight<String> {
 
 impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
-        use shell_escape::escape;
+        use shell_escape::unix::escape;
         let mut result = String::new();
 
         let prompt = format!("{}", self.prompt);
