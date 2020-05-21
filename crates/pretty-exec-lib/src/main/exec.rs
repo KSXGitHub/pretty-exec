@@ -3,12 +3,11 @@ use std::io;
 
 pub fn exec(param: Param) -> Result<ExitStatus, String> {
     let Param {
+        program,
         arguments,
         syntax_highlight,
         support_github_action,
     } = param;
-    let program: &str = arguments[1].as_str();
-    let arguments: &[String] = &arguments[2..];
     let mut pretty_exec = PrettyExec::new(program);
 
     for argument in arguments {

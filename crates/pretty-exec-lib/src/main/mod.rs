@@ -1,3 +1,4 @@
+pub mod args;
 pub mod exec;
 pub mod print_title;
 
@@ -6,8 +7,9 @@ use std::env;
 
 pub use std::process::ExitStatus;
 
-pub struct Param {
-    pub arguments: Vec<String>,
+pub struct Param<'a> {
+    pub program: &'a str,
+    pub arguments: &'a [String],
     pub syntax_highlight: SyntaxHighLight<String>,
     pub support_github_action: bool,
 }
@@ -31,6 +33,9 @@ pub fn main() -> Result<i32, String> {
         return Err("No arguments".to_owned());
     }
 
+    let program: &str = arguments[1].as_str();
+    let arguments: &[String] = &arguments[2..];
+
     let syntax_highlight = if support_color {
         SyntaxHighLight::default_color()
     } else {
@@ -38,6 +43,7 @@ pub fn main() -> Result<i32, String> {
     };
 
     let param = Param {
+        program,
         arguments,
         syntax_highlight,
         support_github_action,
