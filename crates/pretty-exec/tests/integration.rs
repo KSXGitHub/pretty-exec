@@ -178,3 +178,62 @@ fn shell_escape() {
 
     assert_eq!(actual_stdout, expected_stdout);
 }
+
+#[test]
+fn escape_flags_with_whitespaces() {
+    let output = exe()
+        .arg("--color=never")
+        .arg("--")
+        .arg("echo")
+        .arg("--abc=def")
+        .arg("--abc=d e f")
+        .arg("--a b c=def")
+        .arg("--a b c = d e f")
+        .arg("--a b c")
+        .output()
+        .unwrap();
+
+    let expected_stdout = format!(
+        "{cmd}\n{output}\n",
+        cmd = "$ echo --abc=def --abc='d e f' '--a b c'=def '--a b c '=' d e f' '--a b c'",
+        output = "--abc=def --abc=d e f --a b c=def --a b c = d e f --a b c",
+    );
+
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(actual_stdout, expected_stdout);
+}
+
+#[test]
+fn escape_flags_with_whitespaces_colorful() {
+    let output = exe()
+        .arg("--color=always")
+        .arg("--")
+        .arg("echo")
+        .arg("--abc=def")
+        .arg("--abc=d e f")
+        .arg("--a b c=def")
+        .arg("--a b c = d e f")
+        .arg("--a b c")
+        .output()
+        .unwrap();
+
+    let expected_stdout = format!(
+        "{cmd}\n{output}\n",
+        cmd = format!(
+            "{} {} {}=def {}='d e f' {}=def {}=' d e f' {}",
+            Style::default().dimmed().paint("$"),
+            Color::Green.paint("echo"),
+            Color::Red.paint("--abc"),
+            Color::Red.paint("--abc"),
+            Color::Red.paint("'--a b c'"),
+            Color::Red.paint("'--a b c '"),
+            Color::Red.paint("'--a b c'"),
+        ),
+        output = "--abc=def --abc=d e f --a b c=def --a b c = d e f --a b c",
+    );
+
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(actual_stdout, expected_stdout);
+}
