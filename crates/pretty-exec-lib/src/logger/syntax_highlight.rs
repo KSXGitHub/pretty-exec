@@ -61,23 +61,29 @@ impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
         .expect("write program name");
 
         for argument in arguments {
-            let argument = argument.as_ref().to_string_lossy().pipe(escape);
+            let argument = argument.as_ref().to_string_lossy();
+            let paint = |text: &str, style: &Style| {
+                text.to_owned()
+                    .pipe(std::borrow::Cow::from)
+                    .pipe(escape)
+                    .pipe(|x| style.paint(x))
+            };
             let argument = if argument.starts_with("--") {
                 let segments: Vec<_> = argument.splitn(2, '=').collect();
                 match segments[..] {
                     [_] => self.long_flag.paint(argument),
                     [flag, val] => Style::default().paint(format!(
                         "{flag}{eq}{val}",
-                        flag = self.long_flag.paint(flag),
+                        flag = paint(flag, &self.long_flag),
                         eq = self.argument.paint("="),
-                        val = self.argument.paint(val),
+                        val = paint(val, &self.argument),
                     )),
                     _ => unreachable!(),
                 }
             } else if argument.starts_with('-') {
-                self.short_flag.paint(argument)
+                paint(&argument, &self.short_flag)
             } else {
-                self.argument.paint(argument)
+                paint(&argument, &self.argument)
             };
             write!(result, " {}", argument).expect("write argument");
         }
