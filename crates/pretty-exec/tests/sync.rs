@@ -11,15 +11,33 @@ struct CargoPackage {
     pub version: String,
 }
 
-fn get_version(text: &str) -> String {
-    text.pipe(toml::from_str::<CargoManifest>)
+#[derive(Debug, Serialize, Deserialize)]
+struct SyncJson {
+    pub version: String,
+}
+
+fn get_json_version() -> String {
+    include_str!("../../../sync.json")
+        .pipe(serde_json::from_str::<SyncJson>)
         .pipe(Result::unwrap)
-        .pipe(|x: CargoManifest| x.package.version)
+        .pipe(|x: SyncJson| x.version)
+}
+
+fn test_against(toml_text: &str) {
+    let json_version = get_json_version();
+    let toml_version = toml_text
+        .pipe(toml::from_str::<CargoManifest>)
+        .pipe(Result::unwrap)
+        .pipe(|x: CargoManifest| x.package.version);
+    assert_eq!(toml_version, json_version);
 }
 
 #[test]
-fn version() {
-    let bin_version = get_version(include_str!("../Cargo.toml"));
-    let lib_version = get_version(include_str!("../../pretty-exec-lib/Cargo.toml"));
-    assert_eq!(bin_version, lib_version);
+fn bin_version() {
+    test_against(include_str!("../Cargo.toml"));
+}
+
+#[test]
+fn lib_version() {
+    test_against(include_str!("../../pretty-exec-lib/Cargo.toml"));
 }
