@@ -14,3 +14,9 @@ pretty-exec-lib = { path = "../pretty-exec-lib" }
 
 [dev-dependencies]
 ansi_term = "^0.12.1"
+toml = "^0.5.6"
+pipe-trait = "^0.1.11"
+
+[dev-dependencies.serde]
+version = "^1.0.110"
+features = ["derive"]
