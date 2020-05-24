@@ -13,21 +13,21 @@ tag_prefix = 'refs/tags/'
 if release_tag.startswith(tag_prefix):
   release_tag = release_tag.replace(tag_prefix, '', 1)
 
-with open('./nodejs/wasm32-wasi/package.json') as package_json:
+with open('sync.json') as package_json:
   data = json.load(package_json)
 
   if type(data) != dict:
-    print('::error Content of package.json is not an object')
+    print('::error Content of sync.json is not an object')
     exit(1)
 
   version = data.get('version', None)
 
   if not version:
-    print('::error ::package.json#version is required but missing')
+    print('::error ::sync.json#version is required but missing')
     exit(1)
 
   if version != release_tag:
-    print(f'::warning ::RELEASE_TAG ({release_tag}) does not match package.json#version ({version})')
+    print(f'::warning ::RELEASE_TAG ({release_tag}) does not match sync.json#version ({version})')
     print('::set-output name=release_type::none')
     print('::set-output name=is_release::false')
     print('::set-output name=is_prerelease::false')
