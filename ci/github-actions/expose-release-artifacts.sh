@@ -14,7 +14,7 @@ ls ./downloads | while read -r name; do
     *) suffix='';;
   esac
 
-  src="./downloads/${name}/sane-fmt${suffix}"
+  src="./downloads/${name}/pretty-exec${suffix}"
   dst="./flatten/${name}${suffix}"
   echo Copying "$src" to "$dst"...
   cp "$src" "$dst" || exit $?
