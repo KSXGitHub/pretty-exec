@@ -279,48 +279,48 @@ jobs:
           name: pretty-exec-${{ matrix.target }}
           path: target/${{ matrix.target }}/release/pretty-exec.exe
 
-  # create_release:
-  #   name: Create Release
+  create_release:
+    name: Create Release
 
-  #   needs:
-  #     - test
-  #     - build_linux
-  #     - build_macos
-  #     - build_windows
-  #     - build_wasm
+    needs:
+      - test
+      - build_linux
+      - build_macos
+      - build_windows
+      - build_wasm
 
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   outputs:
-  #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #     release_type: ${{ steps.release_type.outputs.release_type }}
-  #     is_release: ${{ steps.release_type.outputs.is_release }}
-  #     is_prerelease: ${{ steps.release_type.outputs.is_prerelease }}
-  #     release_tag: ${{ steps.release_type.outputs.release_tag }}
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      release_type: ${{ steps.release_type.outputs.release_type }}
+      is_release: ${{ steps.release_type.outputs.is_release }}
+      is_prerelease: ${{ steps.release_type.outputs.is_prerelease }}
+      release_tag: ${{ steps.release_type.outputs.release_tag }}
 
-  #   steps:
-  #     - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: Install APT packages
-  #       run: sudo apt install -y python3
+      - name: Install APT packages
+        run: sudo apt install -y python3
 
-  #     - name: Determine release type
-  #       id: release_type
-  #       run: ./ci/github-actions/release-type.py3
-  #       env:
-  #         RELEASE_TAG: ${{ github.ref }}
+      - name: Determine release type
+        id: release_type
+        run: ./ci/github-actions/release-type.py3
+        env:
+          RELEASE_TAG: ${{ github.ref }}
 
-  #     - name: Create Release
-  #       id: create_release
-  #       if: steps.release_type.outputs.is_release == 'true'
-  #       uses: actions/create-release@v1.0.1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ steps.release_type.outputs.release_tag }}
-  #         release_name: ${{ steps.release_type.outputs.release_tag }}
-  #         draft: 'false'
-  #         prerelease: ${{ steps.release_type.outputs.is_prerelease }}
+      - name: Create Release
+        id: create_release
+        if: steps.release_type.outputs.is_release == 'true'
+        uses: actions/create-release@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.release_type.outputs.release_tag }}
+          release_name: ${{ steps.release_type.outputs.release_tag }}
+          draft: 'false'
+          prerelease: ${{ steps.release_type.outputs.is_prerelease }}
 
   # upload_release_assets:
   #   name: Upload Release Assets
