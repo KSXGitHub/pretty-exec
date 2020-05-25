@@ -2,12 +2,16 @@
 set -o errexit -o nounset
 
 publish() (
-  echo "::group::Publishing $1..."
+  echo "::group::Crate: $1"
+  echo '::group::building...'
+  cargo build --locked --release
+  echo '::endgroup::'
+  echo '::group::publishing...'
   cd ./crates/"$1"
   cargo publish
+  echo '::endgroup::'
   echo '::endgroup::'
 )
 
 publish pretty-exec-lib
-sleep 5
 publish pretty-exec
