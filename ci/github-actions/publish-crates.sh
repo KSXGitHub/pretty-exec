@@ -2,14 +2,9 @@
 set -o errexit -o nounset
 
 publish() (
-  echo "::group::Crate: $1"
-  echo '::group::building...'
-  cargo build --locked --release
-  echo '::endgroup::'
-  echo '::group::publishing...'
+  echo "::group::Publishing $1..."
   cd ./crates/"$1"
   cargo publish
-  echo '::endgroup::'
   echo '::endgroup::'
 )
 

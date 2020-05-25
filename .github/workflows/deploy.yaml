@@ -519,6 +519,53 @@ jobs:
           override: 'true'
           default: 'true'
 
+      - name: Cache Rust Cargo Registry
+        uses: actions/cache@v1.1.2
+        timeout-minutes: 1
+        continue-on-error: true
+        with:
+          path: ~/.cargo/registry
+          key: publish-cargo-registry-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            publish-cargo-registry-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+            publish-cargo-registry-${{ matrix.rust }}-
+
+      - name: Cache Rust Cargo Index
+        uses: actions/cache@v1.1.2
+        timeout-minutes: 1
+        continue-on-error: true
+        with:
+          path: ~/.cargo/git
+          key: publish-cargo-index-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            publish-cargo-index-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+            publish-cargo-index-${{ matrix.rust }}-
+
+      - name: Cache Rust Build
+        uses: actions/cache@v1.1.2
+        timeout-minutes: 1
+        continue-on-error: true
+        with:
+          path: target
+          key: publish-build-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            publish-build-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+            publish-build-${{ matrix.rust }}-
+
+      - uses: actions-rs/toolchain@v1.0.6
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          target: ${{ matrix.target }}
+          override: 'true'
+          default: 'true'
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Test
+        run: cargo test --release
+
       - name: Login
         run: cargo login ${{ secrets.CRATE_AUTH_TOKEN }}
 
