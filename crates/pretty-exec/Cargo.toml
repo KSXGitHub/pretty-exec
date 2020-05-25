@@ -10,6 +10,7 @@ categories = ["command-line-utilities"]
 repository = "https://github.com/KSXGitHub/pretty-exec.git"
 
 [dependencies.pretty-exec-lib]
+version = "0.0.0"
 path = "../pretty-exec-lib"
 
 [dev-dependencies]
