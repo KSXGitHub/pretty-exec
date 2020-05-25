@@ -9,4 +9,5 @@ publish() (
 )
 
 publish pretty-exec-lib
+sleep 5
 publish pretty-exec
