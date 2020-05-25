@@ -561,7 +561,7 @@ jobs:
           default: 'true'
 
       - name: Build
-        run: cargo build --release
+        run: cargo build --release --locked
 
       - name: Test
         run: cargo test --release
