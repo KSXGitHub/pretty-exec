@@ -560,14 +560,7 @@ jobs:
           override: 'true'
           default: 'true'
 
-      - name: Build
-        run: cargo build --release --locked
-
-      - name: Test
-        run: cargo test --release
-
-      - name: Login
-        run: cargo login ${{ secrets.CRATE_AUTH_TOKEN }}
+      - run: cargo install cargo-publish-all
 
       - name: Publish
-        run: ./ci/github-actions/publish-crates.sh
+        run: cargo-publish-all --token ${{ secrets.CRATE_AUTH_TOKEN }}
