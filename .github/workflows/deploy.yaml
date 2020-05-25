@@ -439,59 +439,59 @@ jobs:
           asset_name: sha512sum.txt
           asset_content_type: text/plain
 
-  # publish_aur_package:
-  #   name: Publish AUR package
+  publish_aur_package:
+    name: Publish AUR package
 
-  #   needs:
-  #     - create_release
-  #     - test
-  #     - build_linux
-  #     - upload_release_assets
+    needs:
+      - create_release
+      - test
+      - build_linux
+      - upload_release_assets
 
-  #   if: needs.create_release.outputs.release_type == 'official'
+    if: needs.create_release.outputs.release_type == 'official'
 
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   strategy:
-  #     fail-fast: true
-  #     matrix:
-  #       target:
-  #         - x86_64-unknown-linux-gnu
+    strategy:
+      fail-fast: true
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu
 
-  #   steps:
-  #     - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: Download checksums
-  #       uses: actions/download-artifact@v2.0
-  #       with:
-  #         name: checksums
-  #         path: ./checksums
+      - name: Download checksums
+        uses: actions/download-artifact@v2.0
+        with:
+          name: checksums
+          path: ./checksums
 
-  #     - name: Generate PKGBUILD
-  #       env:
-  #         TARGET: ${{ matrix.target }}
-  #         RELEASE_TAG: ${{ needs.create_release.outputs.release_tag }}
-  #       run: ./ci/github-actions/generate-pkgbuild.py3
+      - name: Generate PKGBUILD
+        env:
+          TARGET: ${{ matrix.target }}
+          RELEASE_TAG: ${{ needs.create_release.outputs.release_tag }}
+        run: ./ci/github-actions/generate-pkgbuild.py3
 
-  #     - name: Publish pretty-exec to the AUR
-  #       uses: KSXGitHub/github-actions-deploy-aur@v2.0.2
-  #       with:
-  #         pkgname: pretty-exec
-  #         pkgbuild: ./pkgbuild/pretty-exec/PKGBUILD
-  #         commit_username: ${{ secrets.AUR_USERNAME }}
-  #         commit_email: ${{ secrets.AUR_EMAIL }}
-  #         ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-  #         commit_message: ${{ needs.create_release.outputs.release_tag }}
+      - name: Publish pretty-exec to the AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v2.0.2
+        with:
+          pkgname: pretty-exec
+          pkgbuild: ./pkgbuild/pretty-exec/PKGBUILD
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: ${{ needs.create_release.outputs.release_tag }}
 
-  #     - name: Publish pretty-exec-bin to the AUR
-  #       uses: KSXGitHub/github-actions-deploy-aur@v2.0.2
-  #       with:
-  #         pkgname: pretty-exec-bin
-  #         pkgbuild: ./pkgbuild/pretty-exec-bin/PKGBUILD
-  #         commit_username: ${{ secrets.AUR_USERNAME }}
-  #         commit_email: ${{ secrets.AUR_EMAIL }}
-  #         ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-  #         commit_message: ${{ needs.create_release.outputs.release_tag }}
+      - name: Publish pretty-exec-bin to the AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v2.0.2
+        with:
+          pkgname: pretty-exec-bin
+          pkgbuild: ./pkgbuild/pretty-exec-bin/PKGBUILD
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: ${{ needs.create_release.outputs.release_tag }}
 
   # publish_cargo_crate:
   #   name: Publish Cargo crate
