@@ -7,8 +7,13 @@ if [ -z "$RELEASE_TAG" ]; then
 fi
 
 wait_for_version() (
-  sleep 1
-  echo .
+  echo '60 seconds'
+  for _ in {0..59}; do
+    sleep 1
+    printf .
+  done
+  echo
+
   prefix=https://raw.githubusercontent.com/rust-lang/crates.io-index/master/pr/et
   while read -r json
   do
@@ -17,6 +22,7 @@ wait_for_version() (
       exit 0
     fi
   done < <(curl -fsSL -H 'Cache-Control: no-cache' $prefix/"$1?without-cache-$(date +%s)")
+
   wait_for_version "$1"
 )
 
