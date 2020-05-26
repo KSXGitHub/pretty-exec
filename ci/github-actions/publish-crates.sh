@@ -21,11 +21,11 @@ wait_for_version() (
 )
 
 publish() (
-  echo "::group::Publishing $1..."
+  echo "::group::Publishing $1@$RELEASE_TAG..."
   cd ./crates/"$1"
   cargo publish
   echo '::endgroup::'
-  echo "::group::Waiting for $1 to be available..."
+  echo "::group::Waiting for $1@$RELEASE_TAG to be available..."
   wait_for_version "$1"
   echo '::endgroup::'
 )
