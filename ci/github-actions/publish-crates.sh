@@ -8,7 +8,7 @@ fi
 
 wait_for_version() (
   sleep 1
-  printf '.'
+  echo .
   url=https://raw.githubusercontent.com/rust-lang/crates.io-index/master/pr/et/pretty-exec-lib
   curl -fsSL $url | while read -r json
   do
@@ -27,7 +27,6 @@ publish() (
   echo '::endgroup::'
   echo "::group::Waiting for $1 to be available..."
   wait_for_version
-  echo
   echo '::endgroup::'
 )
 
