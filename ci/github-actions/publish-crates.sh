@@ -9,15 +9,15 @@ fi
 wait_for_version() (
   sleep 1
   echo .
-  url=https://raw.githubusercontent.com/rust-lang/crates.io-index/master/pr/et/pretty-exec-lib
-  curl -fsSL $url | while read -r json
+  prefix=https://raw.githubusercontent.com/rust-lang/crates.io-index/master/pr/et
+  curl -fsSL $prefix/"$1" | while read -r json
   do
     tag=$(echo "$json" | jq --raw-output '.vers')
     if [ "$tag" = "$RELEASE_TAG" ]; then
       exit 0
     fi
   done
-  wait_for_version
+  wait_for_version "$1"
 )
 
 publish() (
@@ -26,7 +26,7 @@ publish() (
   cargo publish
   echo '::endgroup::'
   echo "::group::Waiting for $1 to be available..."
-  wait_for_version
+  wait_for_version "$1"
   echo '::endgroup::'
 )
 
