@@ -16,7 +16,7 @@ wait_for_version() (
     if [ "$tag" = "$RELEASE_TAG" ]; then
       exit 0
     fi
-  done < <(curl -fsSL $prefix/"$1")
+  done < <(curl -fsSL -H 'Cache-Control: no-cache' $prefix/"$1?without-cache-$(date +%s)")
   wait_for_version "$1"
 )
 
