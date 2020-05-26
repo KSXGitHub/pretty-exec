@@ -11,7 +11,7 @@ wait_for_version() (
   url=$prefix/"$1?without-cache-$(date +%s)"
   echo "url: $url"
 
-  echo '60 seconds'
+  printf '60 seconds'
   for _ in {0..59}; do
     sleep 1
     printf .
