@@ -7,6 +7,10 @@ if [ -z "$RELEASE_TAG" ]; then
 fi
 
 wait_for_version() (
+  prefix=https://raw.githubusercontent.com/rust-lang/crates.io-index/master/pr/et
+  url=$prefix/"$1?without-cache-$(date +%s)"
+  echo "::group::url: $url"
+
   echo '60 seconds'
   for _ in {0..59}; do
     sleep 1
@@ -14,15 +18,18 @@ wait_for_version() (
   done
   echo
 
-  prefix=https://raw.githubusercontent.com/rust-lang/crates.io-index/master/pr/et
   while read -r json
   do
     tag=$(echo "$json" | jq --raw-output '.vers')
+    echo "tag: $tag"
     if [ "$tag" = "$RELEASE_TAG" ]; then
+      echo 'found'
+      echo '::endgroup::'
       exit 0
     fi
-  done < <(curl -fsSL -H 'Cache-Control: no-cache' $prefix/"$1?without-cache-$(date +%s)")
+  done < <(curl -fsSL -H 'Cache-Control: no-cache' "$url")
 
+  echo "::endgroup::"
   wait_for_version "$1"
 )
 
