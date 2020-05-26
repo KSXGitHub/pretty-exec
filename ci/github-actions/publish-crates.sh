@@ -17,7 +17,7 @@ wait_for_version() (
       exit 0
     fi
   done < <(curl -fsSL $prefix/"$1")
-  wait_for_version "$1"
+  exec wait_for_version "$1"
 )
 
 publish() (
