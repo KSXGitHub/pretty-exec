@@ -1,5 +1,5 @@
 fn main() {
-    let status = match pretty_exec_lib::main() {
+    let status = match pretty_exec::main() {
         Ok(status) => status,
         Err(error) => {
             eprintln!("ERROR: {}", error);
