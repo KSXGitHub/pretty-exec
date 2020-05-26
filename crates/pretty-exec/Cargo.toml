@@ -8,6 +8,7 @@ edition = "2018"
 keywords = ["spawn", "subprocess", "command"]
 categories = ["command-line-utilities"]
 repository = "https://github.com/KSXGitHub/pretty-exec.git"
+readme = "README.md"
 
 [dependencies.pretty-exec-lib]
 version = "0.0.14"
