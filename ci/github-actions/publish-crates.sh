@@ -20,9 +20,9 @@ wait_for_version() (
 
   while read -r json
   do
-    tag=$(echo "$json" | jq --raw-output '.vers')
-    echo "tag: $tag"
-    if [ "$tag" = "$RELEASE_TAG" ]; then
+    vers=$(echo "$json" | jq --raw-output '.vers')
+    echo "vers: $vers"
+    if [ "$vers" = "$RELEASE_TAG" ]; then
       echo 'found'
       exit 0
     fi
