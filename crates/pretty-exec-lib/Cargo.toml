@@ -11,6 +11,6 @@ readme = "README.md"
 
 [dependencies]
 ansi_term = "^0.12.1"
-shell-escape = "^0.1.4"
+shell-escape = "^0.1.5"
 structopt = "^0.3.14"
 pipe-trait = "^0.2.0"
