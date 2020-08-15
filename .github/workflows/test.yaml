@@ -30,6 +30,7 @@ jobs:
         uses: actions/cache@v2
         timeout-minutes: 1
         continue-on-error: true
+        if: matrix.os != 'macos-latest' # Cache causes errors on macOS
         with:
           path: ~/.cargo/registry
           key: ${{ github.job }}-cargo-registry-${{ matrix.rust }}-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
@@ -41,6 +42,7 @@ jobs:
         uses: actions/cache@v2
         timeout-minutes: 1
         continue-on-error: true
+        if: matrix.os != 'macos-latest' # Cache causes errors on macOS
         with:
           path: ~/.cargo/git
           key: ${{ github.job }}-cargo-index-${{ matrix.rust }}-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
@@ -52,6 +54,7 @@ jobs:
         uses: actions/cache@v2
         timeout-minutes: 1
         continue-on-error: true
+        if: matrix.os != 'macos-latest' # Cache causes errors on macOS
         with:
           path: target
           key: ${{ github.job }}-build-${{ matrix.rust }}-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
