@@ -2,7 +2,6 @@
 
 [![Test](https://github.com/KSXGitHub/pretty-exec/workflows/Test/badge.svg)](https://github.com/KSXGitHub/pretty-exec/actions?query=workflow%3ATest)
 [![Travis Build Status](https://img.shields.io/travis/KSXGitHub/pretty-exec/master?label=build&logo=travis)](https://travis-ci.org/KSXGitHub/pretty-exec)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=KSXGitHub/pretty-exec)](https://dependabot.com)
 
 Print a command and then execute it.
 
