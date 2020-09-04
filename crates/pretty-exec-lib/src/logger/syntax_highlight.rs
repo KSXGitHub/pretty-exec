@@ -1,4 +1,4 @@
-use super::{Formatter, OsStr};
+use super::{Formatter, Logger, OsStr};
 use std::fmt::{Display, Write};
 
 pub use ansi_term::{Color, Style};
@@ -89,5 +89,11 @@ impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
         }
 
         result
+    }
+}
+
+impl<Prompt: Display> Logger for SyntaxHighLight<Prompt> {
+    fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
+        eprintln!("{}", self.fmt(program, arguments))
     }
 }

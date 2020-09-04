@@ -13,9 +13,3 @@ pub trait Formatter {
 pub trait Logger {
     fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]);
 }
-
-impl<Fmt: Formatter> Logger for Fmt {
-    fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
-        println!("{}", self.fmt(program, arguments));
-    }
-}
