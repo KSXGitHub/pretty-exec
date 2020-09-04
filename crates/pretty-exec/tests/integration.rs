@@ -37,15 +37,15 @@ fn default_stdout() {
         .output()
         .unwrap();
 
-    let expected_stdout = format!(
-        "{cmd}\n{output}\n",
-        cmd = expected_colorful_title(),
-        output = "hello --world -abc --abc=def",
-    );
-
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let expected_stderr = format!("{}\n", expected_colorful_title());
+    let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
 
-    assert_eq!(actual_stdout, expected_stdout);
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
 }
 
 #[test]
@@ -61,15 +61,15 @@ fn color_never_stdout() {
         .output()
         .unwrap();
 
-    let expected_stdout = format!(
-        "{cmd}\n{output}\n",
-        cmd = "$ echo hello --world -abc --abc=def",
-        output = "hello --world -abc --abc=def",
-    );
-
+    let expected_stderr = "$ echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
 
-    assert_eq!(actual_stdout, expected_stdout);
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
 }
 
 #[test]
@@ -136,9 +136,15 @@ fn skip_exec_stdout() {
         .output()
         .unwrap();
 
-    let expected_stdout = format!("{}\n", expected_colorful_title());
+    let expected_stderr = format!("{}\n", expected_colorful_title());
+    let expected_stdout = "".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
-    assert_eq!(actual_stdout, expected_stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
 }
 
 #[test]
@@ -168,15 +174,15 @@ fn shell_escape() {
         .output()
         .unwrap();
 
-    let expected_stdout = format!(
-        "{cmd}\n{output}\n",
-        cmd = "$ echo 'abc def ghi' 'jkl mno' pqrs '>' '>>'",
-        output = "abc def ghi jkl mno pqrs > >>",
-    );
-
+    let expected_stderr = "$ echo 'abc def ghi' 'jkl mno' pqrs '>' '>>'\n".to_string();
+    let expected_stdout = "abc def ghi jkl mno pqrs > >>\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
 
-    assert_eq!(actual_stdout, expected_stdout);
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
 }
 
 #[test]
@@ -193,15 +199,16 @@ fn escape_flags_with_whitespaces() {
         .output()
         .unwrap();
 
-    let expected_stdout = format!(
-        "{cmd}\n{output}\n",
-        cmd = "$ echo --abc=def --abc='d e f' '--a b c'=def '--a b c '=' d e f' '--a b c'",
-        output = "--abc=def --abc=d e f --a b c=def --a b c = d e f --a b c",
-    );
-
+    let expected_stderr =
+        "$ echo --abc=def --abc='d e f' '--a b c'=def '--a b c '=' d e f' '--a b c'\n".to_string();
+    let expected_stdout = "--abc=def --abc=d e f --a b c=def --a b c = d e f --a b c\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
 
-    assert_eq!(actual_stdout, expected_stdout);
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
 }
 
 #[test]
@@ -218,22 +225,22 @@ fn escape_flags_with_whitespaces_colorful() {
         .output()
         .unwrap();
 
-    let expected_stdout = format!(
-        "{cmd}\n{output}\n",
-        cmd = format!(
-            "{} {} {}=def {}='d e f' {}=def {}=' d e f' {}",
-            Style::default().dimmed().paint("$"),
-            Color::Green.paint("echo"),
-            Color::Red.paint("--abc"),
-            Color::Red.paint("--abc"),
-            Color::Red.paint("'--a b c'"),
-            Color::Red.paint("'--a b c '"),
-            Color::Red.paint("'--a b c'"),
-        ),
-        output = "--abc=def --abc=d e f --a b c=def --a b c = d e f --a b c",
+    let expected_stderr = format!(
+        "{} {} {}=def {}='d e f' {}=def {}=' d e f' {}\n",
+        Style::default().dimmed().paint("$"),
+        Color::Green.paint("echo"),
+        Color::Red.paint("--abc"),
+        Color::Red.paint("--abc"),
+        Color::Red.paint("'--a b c'"),
+        Color::Red.paint("'--a b c '"),
+        Color::Red.paint("'--a b c'"),
     );
-
+    let expected_stdout = "--abc=def --abc=d e f --a b c=def --a b c = d e f --a b c\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
 
-    assert_eq!(actual_stdout, expected_stdout);
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
 }
