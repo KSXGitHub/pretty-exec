@@ -6,9 +6,16 @@ arch=(x86_64)
 license=(MIT)
 url='https://github.com/KSXGitHub/pretty-exec'
 conflicts=(pretty-exec)
-sha1sums=($_checksum SKIP)
+sha1sums=(
+  "$_checksum"                  # for the pretty-exec binary
+  "${_completion_checksums[@]}" # for the completion files
+  SKIP                          # for the license file
+)
 
 package() {
-  install -Dm755 pretty-exec-$_checksum "$pkgdir"/usr/bin/pretty-exec
-  install -Dm644 LICENSE.md "$pkgdir"/usr/share/"$pkgname"/LICENSE.md
+  install -Dm755 "pretty-exec-$_checksum" "$pkgdir/usr/bin/pretty-exec"
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/$pkgname/LICENSE.md"
+  install -Dm644 "completion.$pkgver.bash" "$pkgdir/usr/share/bash-completion/completions/pretty-exec"
+  install -Dm644 "completion.$pkgver.fish" "$pkgdir/usr/share/fish/completions/pretty-exec.fish"
+  install -Dm644 "completion.$pkgver.zsh" "$pkgdir/usr/share/zsh/site-functions/_pretty-exec"
 }
