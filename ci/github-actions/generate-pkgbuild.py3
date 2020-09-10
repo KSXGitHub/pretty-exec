@@ -45,10 +45,10 @@ with open('./pkgbuild/pretty-exec-bin/PKGBUILD', 'w') as pkgbuild:
   source_url_prefix = f'https://github.com/KSXGitHub/pretty-exec/releases/download/{release_tag}'
   source_url = f'{source_url_prefix}/pretty-exec-{target}'
   supported_completions = ['bash', 'fish', 'zsh']
-  completion_source = [
+  completion_source = ' '.join(
     f'completion.{release_tag}.{ext}::{source_url_prefix}/completion.{ext}'
     for ext in supported_completions
-  ]
+  )
   content += f'source=(pretty-exec-{checksum}::{source_url} {completion_source} {license_url})\n'
   content += f'_checksum={checksum}\n'
   completion_checksums = ' '.join('SKIP' for _ in supported_completions)
