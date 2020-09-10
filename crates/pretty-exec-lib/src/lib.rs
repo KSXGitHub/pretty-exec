@@ -7,4 +7,4 @@ pub use logger::*;
 pub use main::*;
 pub use pretty_exec::*;
 
-pub use structopt::{self, clap};
+pub use structopt_utilities::{self, clap, structopt};
