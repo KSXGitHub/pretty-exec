@@ -8,12 +8,12 @@ url='https://github.com/KSXGitHub/pretty-exec'
 makedepends=(cargo)
 
 build() {
-  cd "$srcdir"/pretty-exec-"$pkgver"
+  cd "$srcdir/pretty-exec-$pkgver"
   cargo build --release --locked
 }
 
 package() {
-  cd "$srcdir"/pretty-exec-"$pkgver"
-  install -Dm755 target/release/pretty-exec "$pkgdir"/usr/bin/pretty-exec
-  install -Dm644 LICENSE.md "$pkgdir"/usr/share/"$pkgname"/LICENSE.md
+  cd "$srcdir/pretty-exec-$pkgver"
+  install -Dm755 target/release/pretty-exec "$pkgdir/usr/bin/pretty-exec"
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/$pkgname/LICENSE.md"
 }
