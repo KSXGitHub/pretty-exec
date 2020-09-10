@@ -20,8 +20,7 @@ pub struct Args {
     skip_exec: bool,
 
     /// When to use color
-    /// [choices: auto, never, always]
-    #[structopt(long, default_value = "auto")]
+    #[structopt(long, default_value = "auto", possible_values = &["auto", "never", "always"])]
     color: When,
 
     /// Enable GitHub Action grouping
