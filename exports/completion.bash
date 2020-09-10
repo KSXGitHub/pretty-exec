@@ -28,7 +28,7 @@ _pretty-exec() {
             case "${prev}" in
                 
                 --color)
-                    COMPREPLY=($(compgen -f "${cur}"))
+                    COMPREPLY=($(compgen -W "auto never always" -- "${cur}"))
                     return 0
                     ;;
                 *)
