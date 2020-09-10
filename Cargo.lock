@@ -112,6 +112,7 @@ dependencies = [
  "pipe-trait",
  "shell-escape",
  "structopt",
+ "structopt-utilities",
 ]
 
 [[package]]
@@ -227,6 +228,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "structopt-utilities"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95e6f78aa2d1013fd5adf18e22276e965401d410247795d0ad3149f8bea0f711"
+dependencies = [
+ "pipe-trait",
+ "structopt",
 ]
 
 [[package]]
