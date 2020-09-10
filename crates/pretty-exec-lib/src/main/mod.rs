@@ -3,7 +3,7 @@ pub mod exec;
 pub mod print_title;
 
 use super::{github_actions, PrettyExec, SyntaxHighLight};
-use std::env;
+use structopt_utilities::StructOptUtils;
 
 pub use std::process::ExitStatus;
 
@@ -16,7 +16,7 @@ pub struct Param<'a> {
 }
 
 pub fn main() -> Result<i32, String> {
-    let args = args::Args::get(env::args());
+    let args = args::Args::strict_from_args();
     let param = args.param();
 
     if param.skip_exec {
