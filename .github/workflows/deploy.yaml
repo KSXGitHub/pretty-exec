@@ -111,7 +111,7 @@ jobs:
         run: cargo build --target ${{ matrix.target }} --release
 
       - name: Strip all debug symbols
-        run: strip --strip-all target/${{ matrix.target }}/release/pretty-exec
+        run: strip target/${{ matrix.target }}/release/pretty-exec
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v2
