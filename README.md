@@ -33,9 +33,11 @@ pretty-exec --help
 
 ## Installation
 
-### From [Crates.io](https://crates.io)
+### From [Crates.io](https://crates.io/crates/pretty-exec/)
 
-<pre><code>cargo install <a href="https://crates.io/crates/pretty-exec/">pretty-exec</a></code></pre>
+```sh
+cargo install pretty-exec
+```
 
 ### From [GitHub Release](https://github.com/KSXGitHub/sane-fmt/releases)
 
@@ -43,13 +45,17 @@ Just go to [the release page](https://github.com/KSXGitHub/sane-fmt/releases) an
 
 ### From [the Arch User Repository (AUR)](https://aur.archlinux.org)
 
-#### Build from source
+#### [Build from source](https://aur.archlinux.org/packages/pretty-exec/)
 
-<pre><code>yay -S <a href="https://aur.archlinux.org/packages/pretty-exec/">pretty-exec</a></code></pre>
+```sh
+yay -S pretty-exec
+```
 
-#### Download prebuilt binary
+#### [Download prebuilt binary](https://aur.archlinux.org/packages/pretty-exec-bin/)
 
-<pre><code>yay -S <a href="https://aur.archlinux.org/packages/pretty-exec-bin/">pretty-exec-bin</a></code></pre>
+```sh
+yay -S pretty-exec-bin
+```
 
 ## License
 
