@@ -433,16 +433,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          override: 'true'
-          default: 'true'
-
       - uses: actions-rs/toolchain@v1.0.6
         with:
           profile: minimal
-          target: ${{ matrix.target }}
           override: 'true'
           default: 'true'
 
