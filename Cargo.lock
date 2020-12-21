@@ -94,7 +94,7 @@ checksum = "7d4c36ce339a5efdc0e3e60766952bc1df1b9e2b80cb14f1502c00aa90070ce0"
 
 [[package]]
 name = "pretty-exec"
-version = "0.0.33"
+version = "0.0.34"
 dependencies = [
  "ansi_term 0.12.1",
  "pipe-trait",
@@ -106,7 +106,7 @@ dependencies = [
 
 [[package]]
 name = "pretty-exec-lib"
-version = "0.0.33"
+version = "0.0.34"
 dependencies = [
  "ansi_term 0.12.1",
  "pipe-trait",
