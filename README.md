@@ -59,4 +59,4 @@ yay -S pretty-exec-bin
 
 ## License
 
-[MIT](https://git.io/JfwzH) © [Hoàng Văn Khải](https://github.com/KSXGitHub/)
+[MIT](https://git.io/JfwzH) © [Hoàng Văn Khải](https://ksxgithub.github.io/)
