@@ -93,11 +93,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7d4c36ce339a5efdc0e3e60766952bc1df1b9e2b80cb14f1502c00aa90070ce0"
 
 [[package]]
+name = "pipe-trait"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f794ff1ce7b09190d7ce7b571df3a4162efeefbaa5171ac2f4675d5689d5384"
+
+[[package]]
 name = "pretty-exec"
 version = "0.0.36"
 dependencies = [
  "ansi_term 0.12.1",
- "pipe-trait",
+ "pipe-trait 0.3.1",
  "pretty-exec-lib",
  "serde",
  "serde_json",
@@ -109,7 +115,7 @@ name = "pretty-exec-lib"
 version = "0.0.36"
 dependencies = [
  "ansi_term 0.12.1",
- "pipe-trait",
+ "pipe-trait 0.3.1",
  "shell-escape",
  "structopt",
  "structopt-utilities",
@@ -165,18 +171,18 @@ checksum = "71d301d4193d031abdd79ff7e3dd721168a9572ef3fe51a1517aba235bd8f86e"
 
 [[package]]
 name = "serde"
-version = "1.0.124"
+version = "1.0.125"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd761ff957cb2a45fbb9ab3da6512de9de55872866160b23c25f1a841e99d29f"
+checksum = "558dc50e1a5a5fa7112ca2ce4effcb321b0300c0d4ccf0776a9f60cd89031171"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.124"
+version = "1.0.125"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1800f7693e94e186f5e25a28291ae1570da908aff7d97a095dec1e56ff99069b"
+checksum = "b093b7a2bb58203b5da3056c05b4ec1fed827dcfdb37347a8841695263b3d06d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -236,7 +242,7 @@ version = "0.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "397e6483e84c1d75b05a077dbbc860d546d56f6527cee877c4d73e1a710b4d28"
 dependencies = [
- "pipe-trait",
+ "pipe-trait 0.2.1",
  "structopt",
 ]
 
