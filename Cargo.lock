@@ -88,12 +88,6 @@ checksum = "789da6d93f1b866ffe175afc5322a4d76c038605a1c3319bb57b06967ca98a36"
 
 [[package]]
 name = "pipe-trait"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d4c36ce339a5efdc0e3e60766952bc1df1b9e2b80cb14f1502c00aa90070ce0"
-
-[[package]]
-name = "pipe-trait"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3fd92f5561e74c246a0b7332e09d2364afb40b67d152c4520b3ba2a7d3dea5b3"
@@ -103,7 +97,7 @@ name = "pretty-exec"
 version = "0.0.37"
 dependencies = [
  "ansi_term 0.12.1",
- "pipe-trait 0.3.2",
+ "pipe-trait",
  "pretty-exec-lib",
  "serde",
  "serde_json",
@@ -115,7 +109,7 @@ name = "pretty-exec-lib"
 version = "0.0.37"
 dependencies = [
  "ansi_term 0.12.1",
- "pipe-trait 0.3.2",
+ "pipe-trait",
  "shell-escape",
  "structopt",
  "structopt-utilities",
@@ -238,11 +232,11 @@ dependencies = [
 
 [[package]]
 name = "structopt-utilities"
-version = "0.0.8"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "397e6483e84c1d75b05a077dbbc860d546d56f6527cee877c4d73e1a710b4d28"
+checksum = "86d8a1aea356c5b00463fad9e975ff02d097a360a2efadf4bc1dfbdf35302b71"
 dependencies = [
- "pipe-trait 0.2.1",
+ "pipe-trait",
  "structopt",
 ]
 
