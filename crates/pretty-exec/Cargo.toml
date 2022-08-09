@@ -33,5 +33,5 @@ serde_json = "^1.0.83"
 pipe-trait = "^0.3.2"
 
 [dev-dependencies.serde]
-version = "^1.0.141"
+version = "^1.0.142"
 features = ["derive"]
