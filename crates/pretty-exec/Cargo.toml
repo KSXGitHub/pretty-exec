@@ -30,7 +30,7 @@ path = "../pretty-exec-lib"
 ansi_term = "^0.12.1"
 toml = "^0.5.9"
 serde_json = "^1.0.83"
-pipe-trait = "^0.3.2"
+pipe-trait = "^0.4.0"
 
 [dev-dependencies.serde]
 version = "^1.0.142"
