@@ -87,7 +87,7 @@ fn github_actions() {
 
     let expected_stdout = format!(
         "{cmd}\n{output}\n{endgroup}\n",
-        cmd = format!("::group::{}", expected_colorful_title()),
+        cmd = format_args!("::group::{}", expected_colorful_title()),
         output = "hello --world -abc --abc=def",
         endgroup = "::endgroup::",
     );
