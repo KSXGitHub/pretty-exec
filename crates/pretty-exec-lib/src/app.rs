@@ -5,8 +5,7 @@ pub mod print_title;
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use clap::Parser;
 use nu_ansi_term::AnsiGenericString;
-
-pub use std::process::ExitStatus;
+use std::process::ExitStatus;
 
 pub struct Param<'a> {
     pub program: &'a str,
