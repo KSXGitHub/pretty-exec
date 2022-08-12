@@ -17,9 +17,9 @@ impl<Fmt: Format> Log for GroupOpening<Fmt> {
 
 pub struct GroupClosing;
 impl Format for GroupClosing {
-    type Output = String;
-    fn fmt(&self, _: impl AsRef<OsStr>, _: &[impl AsRef<OsStr>]) -> String {
-        "::endgroup::".to_owned()
+    type Output = &'static str;
+    fn fmt(&self, _: impl AsRef<OsStr>, _: &[impl AsRef<OsStr>]) -> &'static str {
+        "::endgroup::"
     }
 }
 impl Log for GroupClosing {
