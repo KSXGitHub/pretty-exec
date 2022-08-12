@@ -31,9 +31,9 @@ pub struct Args {
 impl Args {
     pub fn syntax_highlight(&self) -> SyntaxHighLight<String> {
         if self.color == When::Never {
-            SyntaxHighLight::default_colorless()
+            SyntaxHighLight::colorless()
         } else {
-            SyntaxHighLight::default_color()
+            SyntaxHighLight::colored()
         }
     }
 

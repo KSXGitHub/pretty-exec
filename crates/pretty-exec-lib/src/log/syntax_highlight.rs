@@ -21,13 +21,13 @@ pub struct SyntaxHighLight<Prompt: Display> {
 impl SyntaxHighLight<String> {
     const DEFAULT_PROMPT: &'static str = "$";
 
-    pub fn default_colorless() -> Self {
+    pub fn colorless() -> Self {
         SyntaxHighLight::builder()
             .prompt(SyntaxHighLight::DEFAULT_PROMPT.to_string())
             .build()
     }
 
-    pub fn default_color() -> Self {
+    pub fn colored() -> Self {
         let prompt = Style::default()
             .dimmed()
             .paint(Self::DEFAULT_PROMPT)
