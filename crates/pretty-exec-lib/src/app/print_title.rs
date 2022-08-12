@@ -1,4 +1,4 @@
-use super::super::*;
+use super::super::Log;
 use super::{github_actions, Param};
 
 pub fn print_title(param: Param) {

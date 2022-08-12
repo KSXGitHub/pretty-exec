@@ -1,6 +1,6 @@
 pub mod when;
 
-pub use when::*;
+pub use when::When;
 
 use super::{Param, SyntaxHighLight};
 use clap::Parser;
