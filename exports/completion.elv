@@ -21,6 +21,8 @@ set edit:completion:arg-completer[pretty-exec] = {|@words|
             cand --color 'When to use color'
             cand -h 'Print help information'
             cand --help 'Print help information'
+            cand -V 'Print version information'
+            cand --version 'Print version information'
             cand --skip-exec 'Do not execute, print command only'
             cand --github-actions 'Enable GitHub Action grouping'
         }

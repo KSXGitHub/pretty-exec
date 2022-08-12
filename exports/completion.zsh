@@ -15,9 +15,11 @@ _pretty-exec() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" \
-'--color=[When to use color]:COLOR:(auto never always)' \
+'--color=[When to use color]:color:(auto never always)' \
 '-h[Print help information]' \
 '--help[Print help information]' \
+'-V[Print version information]' \
+'--version[Print version information]' \
 '--skip-exec[Do not execute, print command only]' \
 '--github-actions[Enable GitHub Action grouping]' \
 ':program -- Program to execute:' \

@@ -5,7 +5,7 @@ use super::{Param, SyntaxHighLight};
 use clap::Parser;
 
 #[derive(Parser)]
-#[clap(name = "pretty-exec", rename_all = "kebab")]
+#[clap(name = "pretty-exec", rename_all = "kebab", version)]
 pub struct Args {
     /// Program to execute
     #[clap(name = "program")]
