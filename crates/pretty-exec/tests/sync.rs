@@ -38,40 +38,20 @@ test_version!(bin_version, "../Cargo.toml");
 test_version!(lib_version, "../../pretty-exec-lib/Cargo.toml");
 
 macro_rules! test_completion {
-    ($test_name:ident, $shell:expr, $path:literal) => {
+    ($test_name:ident: $shell:ident -> $path:literal) => {
         #[test]
         fn $test_name() {
             let expected: &[u8] = include_bytes!($path);
             let mut actual = Vec::new();
-            Args::clap().gen_completions_to("pretty-exec", $shell, &mut actual);
+            Args::clap().gen_completions_to("pretty-exec", Shell::$shell, &mut actual);
             let actual = actual.as_slice();
             assert_eq!(actual, expected);
         }
     };
 }
 
-test_completion!(
-    bash_completion,
-    Shell::Bash,
-    "../../../exports/completion.bash"
-);
-test_completion!(
-    fish_completion,
-    Shell::Fish,
-    "../../../exports/completion.fish"
-);
-test_completion!(
-    zsh_completion,
-    Shell::Zsh,
-    "../../../exports/completion.zsh"
-);
-test_completion!(
-    powershell_completion,
-    Shell::PowerShell,
-    "../../../exports/completion.ps1"
-);
-test_completion!(
-    elvish_completion,
-    Shell::Elvish,
-    "../../../exports/completion.elv"
-);
+test_completion!(bash_completion: Bash -> "../../../exports/completion.bash");
+test_completion!(fish_completion: Fish -> "../../../exports/completion.fish");
+test_completion!(zsh_completion: Zsh -> "../../../exports/completion.zsh");
+test_completion!(powershell_completion: PowerShell -> "../../../exports/completion.ps1");
+test_completion!(elvish_completion: Elvish -> "../../../exports/completion.elv");
