@@ -62,7 +62,7 @@ impl<Prompt: Display> Format for SyntaxHighLight<Prompt> {
 
         let prompt = self.prompt.to_string();
         if !prompt.is_empty() {
-            write!(result, "{} ", prompt).expect("write prompt");
+            write!(result, "{prompt} ").expect("write prompt");
         }
 
         write!(
