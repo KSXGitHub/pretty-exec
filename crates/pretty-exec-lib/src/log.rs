@@ -3,8 +3,9 @@ pub mod nothing;
 pub mod syntax_highlight;
 
 pub use nothing::*;
-pub use std::{ffi::OsStr, fmt::Display};
 pub use syntax_highlight::*;
+
+use std::{ffi::OsStr, fmt::Display};
 
 pub trait Format {
     type Output: Display;
