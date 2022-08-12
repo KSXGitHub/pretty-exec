@@ -3,7 +3,7 @@ pub mod nothing;
 pub mod syntax_highlight;
 
 pub use nothing::Nothing;
-pub use syntax_highlight::{Color, Style, SyntaxHighLight};
+pub use syntax_highlight::SyntaxHighLight;
 
 use std::{ffi::OsStr, fmt::Display};
 
