@@ -9,15 +9,15 @@ use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder)]
 pub struct SyntaxHighLight<Prompt> {
-    prompt: Prompt,
+    pub prompt: Prompt,
     #[builder(default)]
-    program: Style,
+    pub program: Style,
     #[builder(default)]
-    argument: Style,
+    pub argument: Style,
     #[builder(default)]
-    short_flag: Style,
+    pub short_flag: Style,
     #[builder(default)]
-    long_flag: Style,
+    pub long_flag: Style,
 }
 
 impl SyntaxHighLight<&'static str> {
