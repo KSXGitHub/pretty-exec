@@ -35,7 +35,7 @@ impl Args {
         if self.color == When::Never {
             SyntaxHighLight::colorless()
         } else {
-            SyntaxHighLight::colored()
+            SyntaxHighLight::colorful()
         }
     }
 

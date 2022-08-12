@@ -33,7 +33,7 @@ impl<Prompt> SyntaxHighLight<Prompt> {
 }
 
 impl<Prompt> SyntaxHighLight<Prompt> {
-    pub fn colored() -> Self
+    pub fn colorful() -> Self
     where
         AnsiGenericString<'static, str>: Into<Prompt>,
     {
