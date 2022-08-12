@@ -60,7 +60,7 @@ impl<Prompt: Display> Format for SyntaxHighLight<Prompt> {
         use shell_escape::unix::escape;
         let mut result = String::new();
 
-        let prompt = format!("{}", self.prompt);
+        let prompt = self.prompt.to_string();
         if !prompt.is_empty() {
             write!(result, "{} ", prompt).expect("write prompt");
         }
