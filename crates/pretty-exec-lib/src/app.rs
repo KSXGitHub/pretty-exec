@@ -4,7 +4,7 @@ pub mod print_title;
 
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use clap::Parser;
-use std::borrow::Cow;
+use nu_ansi_term::AnsiGenericString;
 
 pub use std::process::ExitStatus;
 
@@ -12,7 +12,7 @@ pub struct Param<'a> {
     pub program: &'a str,
     pub arguments: &'a [String],
     pub skip_exec: bool,
-    pub syntax_highlight: SyntaxHighLight<Cow<'static, str>>,
+    pub syntax_highlight: SyntaxHighLight<AnsiGenericString<'static, str>>,
     pub support_github_action: bool,
 }
 

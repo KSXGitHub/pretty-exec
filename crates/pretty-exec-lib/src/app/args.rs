@@ -4,7 +4,7 @@ pub use when::*;
 
 use super::{Param, SyntaxHighLight};
 use clap::Parser;
-use std::borrow::Cow;
+use nu_ansi_term::AnsiGenericString;
 
 #[derive(Parser)]
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
@@ -31,7 +31,7 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn syntax_highlight(&self) -> SyntaxHighLight<Cow<'static, str>> {
+    pub fn syntax_highlight(&self) -> SyntaxHighLight<AnsiGenericString<'static, str>> {
         if self.color == When::Never {
             SyntaxHighLight::colorless()
         } else {

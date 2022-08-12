@@ -1,7 +1,7 @@
 pub use nu_ansi_term as ansi_term;
 
 use super::{Format, Log, OsStr};
-use nu_ansi_term::{Color, Style};
+use nu_ansi_term::{AnsiGenericString, Color, Style};
 use std::fmt::{Display, Write};
 use typed_builder::TypedBuilder;
 
@@ -35,12 +35,11 @@ impl<Prompt: Display> SyntaxHighLight<Prompt> {
 impl<Prompt: Display> SyntaxHighLight<Prompt> {
     pub fn colored() -> Self
     where
-        String: Into<Prompt>,
+        AnsiGenericString<'static, str>: Into<Prompt>,
     {
         let prompt = Style::default()
             .dimmed()
             .paint(SyntaxHighLight::DEFAULT_PROMPT)
-            .to_string()
             .into();
         SyntaxHighLight::builder()
             .prompt(prompt)
