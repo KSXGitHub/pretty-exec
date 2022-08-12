@@ -1,4 +1,4 @@
-use super::super::main::args::Args;
+use super::super::app::args::Args;
 use structopt_utilities::StructOptUtils;
 
 pub fn main() {
