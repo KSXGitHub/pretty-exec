@@ -9,24 +9,22 @@ _pretty-exec() {
     for i in ${COMP_WORDS[@]}
     do
         case "${i}" in
-            pretty-exec)
-                cmd="pretty-exec"
+            "$1")
+                cmd="pretty__exec"
                 ;;
-            
             *)
                 ;;
         esac
     done
 
     case "${cmd}" in
-        pretty-exec)
-            opts=" -h -V  --skip-exec --github-actions --help --version --color  <program> <arguments>... "
+        pretty__exec)
+            opts="-h --help --skip-exec --color --github-actions <program> <arguments>..."
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
-                
                 --color)
                     COMPREPLY=($(compgen -W "auto never always" -- "${cur}"))
                     return 0
@@ -38,7 +36,6 @@ _pretty-exec() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        
     esac
 }
 

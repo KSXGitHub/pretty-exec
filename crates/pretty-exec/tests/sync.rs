@@ -1,5 +1,5 @@
 use pipe_trait::*;
-use pretty_exec::{args::Args, clap::Shell, structopt::StructOpt};
+use pretty_exec::{args::Args, clap_complete::Shell, clap_utilities::CommandFactoryExtra};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -38,14 +38,19 @@ test_version!(bin_version, "../Cargo.toml");
 test_version!(lib_version, "../../pretty-exec-lib/Cargo.toml");
 
 macro_rules! test_completion {
-    ($test_name:ident: $shell:ident -> $path:literal) => {
+    ($name:ident: $shell:ident -> $path:literal) => {
         #[test]
-        fn $test_name() {
-            let expected: &[u8] = include_bytes!($path);
-            let mut actual = Vec::new();
-            Args::clap().gen_completions_to("pretty-exec", Shell::$shell, &mut actual);
-            let actual = actual.as_slice();
-            assert_eq!(actual, expected);
+        fn $name() {
+            eprintln!(
+                "check!({name}: {shell} => {path});",
+                name = stringify!($name),
+                shell = stringify!($shell),
+                path = $path,
+            );
+            let received = Args::get_completion_string("pretty-exec", Shell::$shell)
+                .expect("get completion string");
+            let expected = include_str!($path);
+            assert!(received == expected, "completion is outdated");
         }
     };
 }

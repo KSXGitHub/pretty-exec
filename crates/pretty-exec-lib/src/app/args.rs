@@ -2,29 +2,29 @@ pub mod when;
 pub use when::*;
 
 use super::{Param, SyntaxHighLight};
-use structopt::*;
+use clap::Parser;
 
-#[derive(StructOpt)]
-#[structopt(name = "pretty-exec", rename_all = "kebab")]
+#[derive(Parser)]
+#[clap(name = "pretty-exec", rename_all = "kebab")]
 pub struct Args {
     /// Program to execute
-    #[structopt(name = "program")]
+    #[clap(name = "program")]
     program: String,
 
     /// Arguments to pass to program
-    #[structopt(name = "arguments")]
+    #[clap(name = "arguments")]
     arguments: Vec<String>,
 
     /// Do not execute, print command only
-    #[structopt(long)]
+    #[clap(long)]
     skip_exec: bool,
 
     /// When to use color
-    #[structopt(long, default_value = "auto", possible_values = &["auto", "never", "always"])]
+    #[clap(long, default_value = "auto", possible_values = &["auto", "never", "always"])]
     color: When,
 
     /// Enable GitHub Action grouping
-    #[structopt(long)]
+    #[clap(long)]
     github_actions: bool,
 }
 

@@ -1,6 +1,7 @@
 use super::super::app::args::Args;
-use structopt_utilities::StructOptUtils;
+use clap_utilities::CommandFactoryExtra;
+use std::process::ExitCode;
 
-pub fn main() {
-    Args::run_completion_generator("pretty-exec-completions", "pretty-exec")
+pub fn main() -> ExitCode {
+    Args::run_completion_generator()
 }
