@@ -1,7 +1,9 @@
 pub use nu_ansi_term as ansi_term;
 
 use super::{Format, Log, OsStr};
+use derive_more::Display;
 use nu_ansi_term::{AnsiGenericString, Color, Style};
+use pipe_trait::Pipe;
 use std::fmt::{Display, Write};
 use typed_builder::TypedBuilder;
 
@@ -25,9 +27,9 @@ impl SyntaxHighLight<&'static str> {
 impl<Prompt> SyntaxHighLight<Prompt> {
     pub fn colorless() -> Self
     where
-        &'static str: Into<Prompt>,
+        ColorlessPrompt: Into<Prompt>,
     {
-        let prompt = SyntaxHighLight::DEFAULT_PROMPT.into();
+        let prompt = SyntaxHighLight::DEFAULT_PROMPT.pipe(ColorlessPrompt).into();
         SyntaxHighLight::builder().prompt(prompt).build()
     }
 }
@@ -35,11 +37,12 @@ impl<Prompt> SyntaxHighLight<Prompt> {
 impl<Prompt> SyntaxHighLight<Prompt> {
     pub fn colorful() -> Self
     where
-        AnsiGenericString<'static, str>: Into<Prompt>,
+        ColorfulPrompt: Into<Prompt>,
     {
         let prompt = Style::default()
             .dimmed()
             .paint(SyntaxHighLight::DEFAULT_PROMPT)
+            .pipe(ColorfulPrompt)
             .into();
         SyntaxHighLight::builder()
             .prompt(prompt)
@@ -54,7 +57,6 @@ impl<Prompt: Display> Format for SyntaxHighLight<Prompt> {
     type Output = String;
 
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
-        use pipe_trait::Pipe;
         use shell_escape::unix::escape;
         let mut result = String::new();
 
@@ -109,5 +111,18 @@ impl<Prompt: Display> Format for SyntaxHighLight<Prompt> {
 impl<Prompt: Display> Log for SyntaxHighLight<Prompt> {
     fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
         eprintln!("{}", self.fmt(program, arguments))
+    }
+}
+
+#[derive(Display)]
+pub struct ColorlessPrompt(&'static str);
+
+#[derive(Display)]
+pub struct ColorfulPrompt(AnsiGenericString<'static, str>);
+
+impl From<ColorlessPrompt> for ColorfulPrompt {
+    fn from(prompt: ColorlessPrompt) -> Self {
+        let ColorlessPrompt(prompt) = prompt;
+        prompt.pipe(AnsiGenericString::from).pipe(ColorfulPrompt)
     }
 }

@@ -2,16 +2,19 @@ pub mod args;
 pub mod exec;
 pub mod print_title;
 
-use super::{github_actions, PrettyExec, SyntaxHighLight};
+use super::{
+    github_actions,
+    log::syntax_highlight::{ColorfulPrompt, SyntaxHighLight},
+    PrettyExec,
+};
 use clap::Parser;
-use nu_ansi_term::AnsiGenericString;
 use std::process::ExitStatus;
 
 pub struct Param<'a> {
     pub program: &'a str,
     pub arguments: &'a [String],
     pub skip_exec: bool,
-    pub syntax_highlight: SyntaxHighLight<AnsiGenericString<'static, str>>,
+    pub syntax_highlight: SyntaxHighLight<ColorfulPrompt>,
     pub support_github_action: bool,
 }
 

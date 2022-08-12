@@ -2,9 +2,9 @@ pub mod when;
 
 pub use when::When;
 
-use super::{Param, SyntaxHighLight};
+use super::super::log::syntax_highlight::{ColorfulPrompt, SyntaxHighLight};
+use super::Param;
 use clap::Parser;
-use nu_ansi_term::AnsiGenericString;
 
 #[derive(Parser)]
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
@@ -31,7 +31,7 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn syntax_highlight(&self) -> SyntaxHighLight<AnsiGenericString<'static, str>> {
+    pub fn syntax_highlight(&self) -> SyntaxHighLight<ColorfulPrompt> {
         if self.color == When::Never {
             SyntaxHighLight::colorless()
         } else {
