@@ -6,11 +6,11 @@ pub use nothing::*;
 pub use std::{ffi::OsStr, fmt::Display};
 pub use syntax_highlight::*;
 
-pub trait Formatter {
+pub trait Format {
     type Output: Display;
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> Self::Output;
 }
 
-pub trait Logger {
+pub trait Log {
     fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]);
 }

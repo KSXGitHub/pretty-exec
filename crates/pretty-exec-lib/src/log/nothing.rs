@@ -1,5 +1,5 @@
-use super::{Logger, OsStr};
+use super::{Log, OsStr};
 pub struct Nothing;
-impl Logger for Nothing {
+impl Log for Nothing {
     fn log(&self, _: impl AsRef<OsStr>, _: &[impl AsRef<OsStr>]) {}
 }

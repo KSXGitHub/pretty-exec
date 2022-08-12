@@ -1,4 +1,4 @@
-use super::logger::{Logger, Nothing};
+use super::log::{Log, Nothing};
 use std::{
     io,
     process::{Command, ExitStatus},
@@ -6,8 +6,8 @@ use std::{
 
 pub struct PrettyExec<PreLog, PostLog>
 where
-    PreLog: Logger,
-    PostLog: Logger,
+    PreLog: Log,
+    PostLog: Log,
 {
     pub program: String,
     pub arguments: Vec<String>,
@@ -18,8 +18,8 @@ where
 
 impl<PreLog, PostLog> PrettyExec<PreLog, PostLog>
 where
-    PreLog: Logger,
-    PostLog: Logger,
+    PreLog: Log,
+    PostLog: Log,
 {
     pub fn arg(&mut self, arg: &str) -> &mut Self {
         self.arguments.push(arg.to_owned());
@@ -34,7 +34,7 @@ where
         result
     }
 
-    pub fn set_log_before<Logger: self::Logger>(
+    pub fn set_log_before<Logger: self::Log>(
         self,
         log_before: Logger,
     ) -> PrettyExec<Logger, PostLog> {
@@ -47,10 +47,7 @@ where
         }
     }
 
-    pub fn set_log_after<Logger: self::Logger>(
-        self,
-        log_after: Logger,
-    ) -> PrettyExec<PreLog, Logger> {
+    pub fn set_log_after<Logger: self::Log>(self, log_after: Logger) -> PrettyExec<PreLog, Logger> {
         PrettyExec {
             program: self.program,
             arguments: self.arguments,

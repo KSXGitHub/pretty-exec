@@ -1,4 +1,4 @@
-use super::{Formatter, Logger, OsStr};
+use super::{Format, Log, OsStr};
 use std::fmt::{Display, Write};
 
 pub use ansi_term::{Color, Style};
@@ -38,7 +38,7 @@ impl SyntaxHighLight<String> {
     }
 }
 
-impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
+impl<Prompt: Display> Format for SyntaxHighLight<Prompt> {
     type Output = String;
 
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
@@ -94,7 +94,7 @@ impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
     }
 }
 
-impl<Prompt: Display> Logger for SyntaxHighLight<Prompt> {
+impl<Prompt: Display> Log for SyntaxHighLight<Prompt> {
     fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
         eprintln!("{}", self.fmt(program, arguments))
     }
