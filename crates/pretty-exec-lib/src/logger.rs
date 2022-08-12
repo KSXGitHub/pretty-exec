@@ -3,11 +3,12 @@ pub mod nothing;
 pub mod syntax_highlight;
 
 pub use nothing::*;
-pub use std::ffi::OsStr;
+pub use std::{ffi::OsStr, fmt::Display};
 pub use syntax_highlight::*;
 
 pub trait Formatter {
-    fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String;
+    type Output: Display;
+    fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> Self::Output;
 }
 
 pub trait Logger {

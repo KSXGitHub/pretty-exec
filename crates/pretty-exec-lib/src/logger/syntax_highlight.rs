@@ -39,6 +39,8 @@ impl SyntaxHighLight<String> {
 }
 
 impl<Prompt: Display> Formatter for SyntaxHighLight<Prompt> {
+    type Output = String;
+
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
         use pipe_trait::*;
         use shell_escape::unix::escape;
