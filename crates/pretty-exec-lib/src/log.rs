@@ -2,8 +2,8 @@ pub mod github_actions;
 pub mod nothing;
 pub mod syntax_highlight;
 
-pub use nothing::*;
-pub use syntax_highlight::*;
+pub use nothing::Nothing;
+pub use syntax_highlight::{Color, Style, SyntaxHighLight};
 
 use std::{ffi::OsStr, fmt::Display};
 
