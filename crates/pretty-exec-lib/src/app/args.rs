@@ -1,8 +1,10 @@
 pub mod when;
+
 pub use when::*;
 
 use super::{Param, SyntaxHighLight};
 use clap::Parser;
+use std::borrow::Cow;
 
 #[derive(Parser)]
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
@@ -29,7 +31,7 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn syntax_highlight(&self) -> SyntaxHighLight<String> {
+    pub fn syntax_highlight(&self) -> SyntaxHighLight<Cow<'static, str>> {
         if self.color == When::Never {
             SyntaxHighLight::colorless()
         } else {

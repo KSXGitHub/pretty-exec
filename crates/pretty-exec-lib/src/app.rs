@@ -4,6 +4,7 @@ pub mod print_title;
 
 use super::{github_actions, PrettyExec, SyntaxHighLight};
 use clap::Parser;
+use std::borrow::Cow;
 
 pub use std::process::ExitStatus;
 
@@ -11,7 +12,7 @@ pub struct Param<'a> {
     pub program: &'a str,
     pub arguments: &'a [String],
     pub skip_exec: bool,
-    pub syntax_highlight: SyntaxHighLight<String>,
+    pub syntax_highlight: SyntaxHighLight<Cow<'static, str>>,
     pub support_github_action: bool,
 }
 

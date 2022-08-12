@@ -18,20 +18,30 @@ pub struct SyntaxHighLight<Prompt: Display> {
     long_flag: Style,
 }
 
-impl SyntaxHighLight<String> {
+impl SyntaxHighLight<&'static str> {
     const DEFAULT_PROMPT: &'static str = "$";
+}
 
-    pub fn colorless() -> Self {
-        SyntaxHighLight::builder()
-            .prompt(SyntaxHighLight::DEFAULT_PROMPT.to_string())
-            .build()
+impl<Prompt: Display> SyntaxHighLight<Prompt> {
+    pub fn colorless() -> Self
+    where
+        &'static str: Into<Prompt>,
+    {
+        let prompt = SyntaxHighLight::DEFAULT_PROMPT.into();
+        SyntaxHighLight::builder().prompt(prompt).build()
     }
+}
 
-    pub fn colored() -> Self {
+impl<Prompt: Display> SyntaxHighLight<Prompt> {
+    pub fn colored() -> Self
+    where
+        String: Into<Prompt>,
+    {
         let prompt = Style::default()
             .dimmed()
-            .paint(Self::DEFAULT_PROMPT)
-            .to_string();
+            .paint(SyntaxHighLight::DEFAULT_PROMPT)
+            .to_string()
+            .into();
         SyntaxHighLight::builder()
             .prompt(prompt)
             .program(Color::Green.into())
