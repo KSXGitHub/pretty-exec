@@ -2,7 +2,7 @@ use super::{Format, Log, OsStr};
 use derive_more::From;
 
 #[derive(From)]
-pub struct GroupOpening<Fmt: Format>(Fmt);
+pub struct GroupOpening<Fmt>(Fmt);
 impl<Fmt: Format> Format for GroupOpening<Fmt> {
     type Output = String;
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {

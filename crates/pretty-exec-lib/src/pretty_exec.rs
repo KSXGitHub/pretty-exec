@@ -4,11 +4,7 @@ use std::{
     process::{Command, ExitStatus},
 };
 
-pub struct PrettyExec<PreLog, PostLog>
-where
-    PreLog: Log,
-    PostLog: Log,
-{
+pub struct PrettyExec<PreLog, PostLog> {
     pub program: String,
     pub arguments: Vec<String>,
     command: Command,
@@ -16,18 +12,18 @@ where
     log_after: PostLog,
 }
 
-impl<PreLog, PostLog> PrettyExec<PreLog, PostLog>
-where
-    PreLog: Log,
-    PostLog: Log,
-{
+impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
     pub fn arg(&mut self, arg: &str) -> &mut Self {
         self.arguments.push(arg.to_owned());
         self.command.arg(arg);
         self
     }
 
-    pub fn spawn(&mut self) -> io::Result<ExitStatus> {
+    pub fn spawn(&mut self) -> io::Result<ExitStatus>
+    where
+        PreLog: Log,
+        PostLog: Log,
+    {
         self.log_before.log(self.program.as_str(), &self.arguments);
         let result = self.command.spawn()?.wait();
         self.log_after.log(self.program.as_str(), &self.arguments);

@@ -6,7 +6,7 @@ use std::fmt::{Display, Write};
 use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder)]
-pub struct SyntaxHighLight<Prompt: Display> {
+pub struct SyntaxHighLight<Prompt> {
     prompt: Prompt,
     #[builder(default)]
     program: Style,
@@ -22,7 +22,7 @@ impl SyntaxHighLight<&'static str> {
     const DEFAULT_PROMPT: &'static str = "$";
 }
 
-impl<Prompt: Display> SyntaxHighLight<Prompt> {
+impl<Prompt> SyntaxHighLight<Prompt> {
     pub fn colorless() -> Self
     where
         &'static str: Into<Prompt>,
@@ -32,7 +32,7 @@ impl<Prompt: Display> SyntaxHighLight<Prompt> {
     }
 }
 
-impl<Prompt: Display> SyntaxHighLight<Prompt> {
+impl<Prompt> SyntaxHighLight<Prompt> {
     pub fn colored() -> Self
     where
         AnsiGenericString<'static, str>: Into<Prompt>,
