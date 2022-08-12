@@ -1,5 +1,5 @@
 #![cfg(test)]
-use ansi_term::*;
+use nu_ansi_term::{Color, Style};
 use std::process::Command;
 
 const EXE: &str = env!("CARGO_BIN_EXE_pretty-exec");
