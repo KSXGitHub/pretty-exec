@@ -1,5 +1,6 @@
-use super::{Format, Log, OsStr};
+use super::{Format, Log};
 use derive_more::From;
+use std::ffi::OsStr;
 
 #[derive(From)]
 pub struct GroupOpening<Fmt>(Fmt);
