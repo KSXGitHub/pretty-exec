@@ -1,6 +1,8 @@
 use super::{Format, Log, OsStr};
+use derive_more::From;
 
-pub struct GroupOpening<Fmt: Format>(pub(crate) Fmt);
+#[derive(From)]
+pub struct GroupOpening<Fmt: Format>(Fmt);
 impl<Fmt: Format> Format for GroupOpening<Fmt> {
     type Output = String;
     fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {

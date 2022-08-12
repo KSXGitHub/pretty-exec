@@ -11,7 +11,7 @@ pub fn print_title(param: Param) {
     } = param;
 
     if support_github_action {
-        github_actions::GroupOpening(syntax_highlight).log(program, arguments);
+        github_actions::GroupOpening::from(syntax_highlight).log(program, arguments);
     } else {
         syntax_highlight.log(program, arguments);
     }
