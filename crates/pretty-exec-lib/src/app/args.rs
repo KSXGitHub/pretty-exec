@@ -20,7 +20,7 @@ pub struct Args {
     skip_exec: bool,
 
     /// When to use color
-    #[clap(long, default_value = "auto", possible_values = &["auto", "never", "always"])]
+    #[clap(long, value_enum, default_value_t = When::Auto)]
     color: When,
 
     /// Enable GitHub Action grouping
