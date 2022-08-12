@@ -3,12 +3,18 @@ pub use nu_ansi_term as ansi_term;
 use super::{Format, Log, OsStr};
 use nu_ansi_term::{Color, Style};
 use std::fmt::{Display, Write};
+use typed_builder::TypedBuilder;
 
+#[derive(TypedBuilder)]
 pub struct SyntaxHighLight<Prompt: Display> {
     prompt: Prompt,
+    #[builder(default)]
     program: Style,
+    #[builder(default)]
     argument: Style,
+    #[builder(default)]
     short_flag: Style,
+    #[builder(default)]
     long_flag: Style,
 }
 
@@ -16,26 +22,22 @@ impl SyntaxHighLight<String> {
     const DEFAULT_PROMPT: &'static str = "$";
 
     pub fn default_colorless() -> Self {
-        Self {
-            prompt: Self::DEFAULT_PROMPT.to_owned(),
-            program: Style::default(),
-            argument: Style::default(),
-            short_flag: Style::default(),
-            long_flag: Style::default(),
-        }
+        SyntaxHighLight::builder()
+            .prompt(SyntaxHighLight::DEFAULT_PROMPT.to_string())
+            .build()
     }
 
     pub fn default_color() -> Self {
-        Self {
-            prompt: Style::default()
-                .dimmed()
-                .paint(Self::DEFAULT_PROMPT)
-                .to_string(),
-            program: Color::Green.into(),
-            argument: Style::default(),
-            short_flag: Color::Red.into(),
-            long_flag: Color::Red.into(),
-        }
+        let prompt = Style::default()
+            .dimmed()
+            .paint(Self::DEFAULT_PROMPT)
+            .to_string();
+        SyntaxHighLight::builder()
+            .prompt(prompt)
+            .program(Color::Green.into())
+            .short_flag(Color::Red.into())
+            .long_flag(Color::Red.into())
+            .build()
     }
 }
 
