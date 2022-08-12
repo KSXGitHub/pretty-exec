@@ -1,7 +1,7 @@
 use super::{Format, Log, OsStr};
 use std::fmt::{Display, Write};
 
-pub use ansi_term::{Color, Style};
+pub use nu_ansi_term::{Color, Style};
 
 pub struct SyntaxHighLight<Prompt: Display> {
     prompt: Prompt,
