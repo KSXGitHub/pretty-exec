@@ -14,14 +14,12 @@ pub fn exec(param: Param) -> Result<ExitStatus, Error> {
         pretty_exec.arg(argument);
     }
 
-    let exec_result = if support_github_action {
+    Ok(if support_github_action {
         pretty_exec
             .set_log_before(github_actions::GroupOpening::from(syntax_highlight))
             .set_log_after(github_actions::GroupClosing)
-            .spawn()
+            .spawn()?
     } else {
-        pretty_exec.set_log_before(syntax_highlight).spawn()
-    };
-
-    exec_result.map_err(Error::from)
+        pretty_exec.set_log_before(syntax_highlight).spawn()?
+    })
 }
