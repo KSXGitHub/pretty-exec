@@ -26,8 +26,9 @@ fn expected_colorful_title() -> String {
 }
 
 #[test]
-fn default_stdout() {
+fn color_always_stdout() {
     let output = exe()
+        .arg("--color=always")
         .arg("--")
         .arg("echo")
         .arg("hello")
@@ -136,7 +137,7 @@ fn skip_exec_stdout() {
         .output()
         .unwrap();
 
-    let expected_stderr = format!("{}\n", expected_colorful_title());
+    let expected_stderr = "$ echo hello --world -abc --abc=def\n".to_string();
     let expected_stdout = "".to_string();
     let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
