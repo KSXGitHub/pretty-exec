@@ -59,12 +59,13 @@ impl<Prompt> SyntaxHighLight<Prompt> {
     }
 }
 
-impl<'a, Prompt, Program: ?Sized, Argument> Display
-    for Logger<'a, SyntaxHighLight<Prompt>, Program, [Argument]>
+impl<'a, Prompt, Program: ?Sized, Arguments: ?Sized> Display
+    for Logger<'a, SyntaxHighLight<Prompt>, Program, Arguments>
 where
     Prompt: Display,
     &'a Program: AsRef<OsStr>,
-    Argument: AsRef<OsStr>,
+    &'a Arguments: IntoIterator,
+    <&'a Arguments as IntoIterator>::Item: AsRef<OsStr>,
 {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let Logger {
@@ -88,7 +89,7 @@ where
                 .pipe(|x| method.program.paint(x))
         )?;
 
-        for argument in arguments.iter() {
+        for argument in *arguments {
             let argument = argument.as_ref().to_string_lossy();
             let paint = |text: &str, style: Style| {
                 text.to_owned()
@@ -120,12 +121,13 @@ where
     }
 }
 
-impl<'a, Prompt, Program: ?Sized, Argument> Log
-    for Logger<'a, SyntaxHighLight<Prompt>, Program, [Argument]>
+impl<'a, Prompt, Program: ?Sized, Arguments: ?Sized> Log
+    for Logger<'a, SyntaxHighLight<Prompt>, Program, Arguments>
 where
     Prompt: Display,
     &'a Program: AsRef<OsStr>,
-    Argument: AsRef<OsStr>,
+    &'a Arguments: IntoIterator,
+    <&'a Arguments as IntoIterator>::Item: AsRef<OsStr>,
 {
     fn log(&self) {
         eprintln!("{self}");
