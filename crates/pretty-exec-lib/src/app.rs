@@ -8,6 +8,7 @@ use super::{
     Error, PrettyExec,
 };
 use clap::Parser;
+use pipe_trait::Pipe;
 use std::process::ExitStatus;
 
 pub struct Param<'a> {
@@ -27,5 +28,7 @@ pub fn main() -> Result<i32, Error> {
         return Ok(0);
     }
 
-    exec::exec(param).and_then(|status| status.code().ok_or(Error::StatusCodeAcquisitionFailure))
+    exec::exec(param)?
+        .pipe_ref(ExitStatus::code)
+        .ok_or(Error::StatusCodeAcquisitionFailure)
 }
