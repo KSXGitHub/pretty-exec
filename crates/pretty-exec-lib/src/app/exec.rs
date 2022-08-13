@@ -1,5 +1,4 @@
 use super::{github_actions, Error, ExitStatus, Param, PrettyExec};
-use std::io;
 
 pub fn exec(param: Param) -> Result<ExitStatus, Error> {
     let Param {
@@ -15,15 +14,14 @@ pub fn exec(param: Param) -> Result<ExitStatus, Error> {
         pretty_exec.arg(argument);
     }
 
-    let mut exec: Box<dyn FnMut() -> io::Result<ExitStatus>> = if support_github_action {
-        let mut pretty_exec = pretty_exec
+    let exec_result = if support_github_action {
+        pretty_exec
             .set_log_before(github_actions::GroupOpening::from(syntax_highlight))
-            .set_log_after(github_actions::GroupClosing);
-        Box::new(move || pretty_exec.spawn())
+            .set_log_after(github_actions::GroupClosing)
+            .spawn()
     } else {
-        let mut pretty_exec = pretty_exec.set_log_before(syntax_highlight);
-        Box::new(move || pretty_exec.spawn())
+        pretty_exec.set_log_before(syntax_highlight).spawn()
     };
 
-    exec().map_err(Error::from)
+    exec_result.map_err(Error::from)
 }
