@@ -203,6 +203,7 @@ dependencies = [
  "nu-ansi-term",
  "pipe-trait",
  "shell-escape",
+ "thiserror",
  "typed-builder",
 ]
 

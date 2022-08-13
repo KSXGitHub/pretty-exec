@@ -1,7 +1,7 @@
-use super::{github_actions, ExitStatus, Param, PrettyExec};
+use super::{github_actions, Error, ExitStatus, Param, PrettyExec};
 use std::io;
 
-pub fn exec(param: Param) -> Result<ExitStatus, String> {
+pub fn exec(param: Param) -> Result<ExitStatus, Error> {
     let Param {
         program,
         arguments,
@@ -25,5 +25,5 @@ pub fn exec(param: Param) -> Result<ExitStatus, String> {
         Box::new(move || pretty_exec.spawn())
     };
 
-    exec().map_err(|error: io::Error| error.to_string())
+    exec().map_err(Error::from)
 }

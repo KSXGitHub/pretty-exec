@@ -5,7 +5,7 @@ pub mod print_title;
 use super::{
     github_actions,
     log::syntax_highlight::{ColorfulPrompt, SyntaxHighLight},
-    PrettyExec,
+    Error, PrettyExec,
 };
 use clap::Parser;
 use std::process::ExitStatus;
@@ -18,7 +18,7 @@ pub struct Param<'a> {
     pub support_github_action: bool,
 }
 
-pub fn main() -> Result<i32, String> {
+pub fn main() -> Result<i32, Error> {
     let args = args::Args::parse();
     let param = args.param();
 
@@ -27,9 +27,5 @@ pub fn main() -> Result<i32, String> {
         return Ok(0);
     }
 
-    exec::exec(param).and_then(|status| {
-        status
-            .code()
-            .ok_or_else(|| "Failed to get status code".to_owned())
-    })
+    exec::exec(param).and_then(|status| status.code().ok_or(Error::StatusCodeAcquisitionFailure))
 }
