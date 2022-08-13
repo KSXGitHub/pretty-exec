@@ -32,3 +32,6 @@ toml = "^0.5.9"
 serde_json = "^1.0.83"
 pipe-trait = "^0.4.0"
 serde = { version = "^1.0.142", features = ["derive"] }
+
+[target.'cfg(target_os = "linux")'.dev-dependencies]
+fake-tty = { path = "../fake-tty" }

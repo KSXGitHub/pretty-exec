@@ -2,6 +2,9 @@
 use nu_ansi_term::{Color, Style};
 use std::process::Command;
 
+#[cfg(target_os = "linux")]
+use fake_tty::FakeTty;
+
 const EXE: &str = env!("CARGO_BIN_EXE_pretty-exec");
 
 fn exe() -> Command {
@@ -66,6 +69,58 @@ fn color_never() {
     let expected_stdout = "hello --world -abc --abc=def\n".to_string();
     let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn color_auto_piped() {
+    let output = exe()
+        .arg("--color=auto")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stderr = "$ echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn color_auto_tty() {
+    let output = exe()
+        .set_fake_tty()
+        .arg("--color=auto")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let expected_stderr = format!("{}\n", expected_colorful_title());
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    eprintln!("STDERR:\n{actual_stderr}\n");
+    eprintln!("STDOUT:\n{actual_stdout}\n");
 
     assert_eq!(
         (actual_stderr, actual_stdout),
