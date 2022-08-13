@@ -12,6 +12,7 @@ use std::{
 };
 use typed_builder::TypedBuilder;
 
+#[must_use]
 #[derive(TypedBuilder)]
 pub struct SyntaxHighLight<Prompt> {
     pub prompt: Prompt,

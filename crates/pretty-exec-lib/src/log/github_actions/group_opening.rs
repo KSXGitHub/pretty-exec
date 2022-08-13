@@ -2,6 +2,7 @@ use super::super::{Log, Logger};
 use derive_more::From;
 use std::fmt::{self, Display, Formatter};
 
+#[must_use]
 #[derive(From)]
 pub struct GroupOpening<Fmt>(Fmt);
 

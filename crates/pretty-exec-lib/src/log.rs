@@ -5,6 +5,7 @@ pub mod syntax_highlight;
 pub use nothing::Nothing;
 pub use syntax_highlight::SyntaxHighLight;
 
+#[must_use]
 pub struct Logger<'a, Method: ?Sized, Program: ?Sized, Arguments: ?Sized> {
     pub method: &'a Method,
     pub program: &'a Program,

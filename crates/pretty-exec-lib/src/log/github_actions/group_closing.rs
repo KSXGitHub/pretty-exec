@@ -1,6 +1,7 @@
 use super::super::{Log, Logger};
 use std::fmt::{self, Display, Formatter};
 
+#[must_use]
 pub struct GroupClosing;
 
 impl<'a, Program: ?Sized, Arguments: ?Sized> Display
