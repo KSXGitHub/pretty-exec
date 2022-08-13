@@ -1,7 +1,7 @@
-use super::{Log, OsStr};
+use super::{Log, Logger};
 
 pub struct Nothing;
 
-impl Log for Nothing {
-    fn log(&self, _: impl AsRef<OsStr>, _: &[impl AsRef<OsStr>]) {}
+impl<'a, Program: ?Sized, Arguments: ?Sized> Log for Logger<'a, Nothing, Program, Arguments> {
+    fn log(&self) {}
 }

@@ -1,4 +1,4 @@
-use super::log::{Log, Nothing};
+use super::log::{Log, Logger, Nothing};
 use std::{
     io,
     process::{Command, ExitStatus},
@@ -19,21 +19,20 @@ impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
         self
     }
 
-    pub fn spawn(&mut self) -> io::Result<ExitStatus>
+    pub fn spawn<'a>(&'a mut self) -> io::Result<ExitStatus>
     where
-        PreLog: Log,
-        PostLog: Log,
+        Logger<'a, PreLog, str, [String]>: Log,
+        Logger<'a, PostLog, str, [String]>: Log,
     {
-        self.log_before.log(self.program.as_str(), &self.arguments);
+        let program = self.program.as_str();
+        let arguments = self.arguments.as_slice();
+        Logger::new(&self.log_before, program, arguments).log();
         let result = self.command.spawn()?.wait();
-        self.log_after.log(self.program.as_str(), &self.arguments);
+        Logger::new(&self.log_after, program, arguments).log();
         result
     }
 
-    pub fn set_log_before<Logger: self::Log>(
-        self,
-        log_before: Logger,
-    ) -> PrettyExec<Logger, PostLog> {
+    pub fn set_log_before<Logger>(self, log_before: Logger) -> PrettyExec<Logger, PostLog> {
         PrettyExec {
             program: self.program,
             arguments: self.arguments,
@@ -43,7 +42,7 @@ impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
         }
     }
 
-    pub fn set_log_after<Logger: self::Log>(self, log_after: Logger) -> PrettyExec<PreLog, Logger> {
+    pub fn set_log_after<Logger>(self, log_after: Logger) -> PrettyExec<PreLog, Logger> {
         PrettyExec {
             program: self.program,
             arguments: self.arguments,

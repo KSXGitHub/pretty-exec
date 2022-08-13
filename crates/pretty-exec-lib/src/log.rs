@@ -5,13 +5,24 @@ pub mod syntax_highlight;
 pub use nothing::Nothing;
 pub use syntax_highlight::SyntaxHighLight;
 
-use std::{ffi::OsStr, fmt::Display};
+pub struct Logger<'a, Method: ?Sized, Program: ?Sized, Arguments: ?Sized> {
+    pub method: &'a Method,
+    pub program: &'a Program,
+    pub arguments: &'a Arguments,
+}
 
-pub trait Format {
-    type Output: Display;
-    fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> Self::Output;
+impl<'a, Method: ?Sized, Program: ?Sized, Arguments: ?Sized>
+    Logger<'a, Method, Program, Arguments>
+{
+    pub fn new(method: &'a Method, program: &'a Program, arguments: &'a Arguments) -> Self {
+        Logger {
+            method,
+            program,
+            arguments,
+        }
+    }
 }
 
 pub trait Log {
-    fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]);
+    fn log(&self);
 }

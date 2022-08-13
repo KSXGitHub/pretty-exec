@@ -1,17 +1,18 @@
-use super::super::{Format, Log};
-use std::ffi::OsStr;
+use super::super::{Log, Logger};
+use std::fmt::{self, Display, Formatter};
 
 pub struct GroupClosing;
 
-impl Format for GroupClosing {
-    type Output = &'static str;
-    fn fmt(&self, _: impl AsRef<OsStr>, _: &[impl AsRef<OsStr>]) -> &'static str {
-        "::endgroup::"
+impl<'a, Program: ?Sized, Arguments: ?Sized> Display
+    for Logger<'a, GroupClosing, Program, Arguments>
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "::endgroup::")
     }
 }
 
-impl Log for GroupClosing {
-    fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
-        println!("{}", self.fmt(program, arguments))
+impl<'a, Program: ?Sized, Arguments: ?Sized> Log for Logger<'a, GroupClosing, Program, Arguments> {
+    fn log(&self) {
+        println!("{self}");
     }
 }

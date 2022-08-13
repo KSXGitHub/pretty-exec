@@ -1,10 +1,15 @@
 pub use nu_ansi_term as ansi_term;
 
-use super::{Format, Log, OsStr};
+use super::{Log, Logger};
 use derive_more::Display;
 use nu_ansi_term::{AnsiGenericString, Color, Style};
 use pipe_trait::Pipe;
-use std::fmt::{Display, Write};
+use shell_escape::unix::escape;
+use std::{
+    borrow::Cow,
+    ffi::OsStr,
+    fmt::{self, Display, Formatter},
+};
 use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder)]
@@ -53,64 +58,76 @@ impl<Prompt> SyntaxHighLight<Prompt> {
     }
 }
 
-impl<Prompt: Display> Format for SyntaxHighLight<Prompt> {
-    type Output = String;
+impl<'a, Prompt, Program: ?Sized, Argument> Display
+    for Logger<'a, SyntaxHighLight<Prompt>, Program, [Argument]>
+where
+    Prompt: Display,
+    &'a Program: AsRef<OsStr>,
+    Argument: AsRef<OsStr>,
+{
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let Logger {
+            method,
+            program,
+            arguments,
+        } = self;
 
-    fn fmt(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) -> String {
-        use shell_escape::unix::escape;
-        let mut result = String::new();
-
-        let prompt = self.prompt.to_string();
+        let prompt = method.prompt.to_string();
         if !prompt.is_empty() {
-            write!(result, "{prompt} ").expect("write prompt");
+            write!(f, "{prompt} ")?;
         }
 
         write!(
-            result,
+            f,
             "{}",
             program
                 .as_ref()
                 .to_string_lossy()
                 .pipe(escape)
-                .pipe(|x| self.program.paint(x))
-        )
-        .expect("write program name");
+                .pipe(|x| method.program.paint(x))
+        )?;
 
-        for argument in arguments {
+        for argument in arguments.iter() {
             let argument = argument.as_ref().to_string_lossy();
-            let paint = |text: &str, style: &Style| {
+            let paint = |text: &str, style: Style| {
                 text.to_owned()
-                    .pipe(std::borrow::Cow::from)
+                    .pipe(Cow::from)
                     .pipe(escape)
                     .pipe(|x| style.paint(x))
             };
             let argument = if argument.starts_with("--") {
                 let segments: Vec<_> = argument.splitn(2, '=').collect();
                 match segments[..] {
-                    [_] => paint(&argument, &self.long_flag),
+                    [_] => paint(&argument, method.long_flag),
                     [flag, val] => Style::default().paint(format!(
                         "{flag}{eq}{val}",
-                        flag = paint(flag, &self.long_flag),
-                        eq = self.argument.paint("="),
-                        val = paint(val, &self.argument),
+                        flag = paint(flag, method.long_flag),
+                        eq = method.argument.paint("="),
+                        val = paint(val, method.argument),
                     )),
                     _ => unreachable!(),
                 }
             } else if argument.starts_with('-') {
-                paint(&argument, &self.short_flag)
+                paint(&argument, method.short_flag)
             } else {
-                paint(&argument, &self.argument)
+                paint(&argument, method.argument)
             };
-            write!(result, " {}", argument).expect("write argument");
+            write!(f, " {argument}")?;
         }
 
-        result
+        Ok(())
     }
 }
 
-impl<Prompt: Display> Log for SyntaxHighLight<Prompt> {
-    fn log(&self, program: impl AsRef<OsStr>, arguments: &[impl AsRef<OsStr>]) {
-        eprintln!("{}", self.fmt(program, arguments))
+impl<'a, Prompt, Program: ?Sized, Argument> Log
+    for Logger<'a, SyntaxHighLight<Prompt>, Program, [Argument]>
+where
+    Prompt: Display,
+    &'a Program: AsRef<OsStr>,
+    Argument: AsRef<OsStr>,
+{
+    fn log(&self) {
+        eprintln!("{self}");
     }
 }
 

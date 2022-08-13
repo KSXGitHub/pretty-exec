@@ -1,4 +1,4 @@
-use super::super::Log;
+use super::super::{Log, Logger};
 use super::{github_actions, Param};
 
 pub fn print_title(param: Param) {
@@ -11,8 +11,9 @@ pub fn print_title(param: Param) {
     } = param;
 
     if support_github_action {
-        github_actions::GroupOpening::from(syntax_highlight).log(program, arguments);
+        let method = github_actions::GroupOpening::from(syntax_highlight);
+        Logger::new(&method, program, arguments).log();
     } else {
-        syntax_highlight.log(program, arguments);
+        Logger::new(&syntax_highlight, program, arguments).log();
     }
 }
