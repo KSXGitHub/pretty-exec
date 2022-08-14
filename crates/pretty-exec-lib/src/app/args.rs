@@ -44,7 +44,7 @@ impl Args {
     pub fn param(&'_ self) -> Param<'_> {
         Param {
             program: self.program.as_str(),
-            arguments: self.arguments.as_ref(),
+            arguments: self.arguments.as_slice(),
             prompt: self.prompt.as_str(),
             skip_exec: self.skip_exec,
             support_github_action: self.github_actions,
