@@ -1,6 +1,10 @@
 #![cfg(test)]
 use nu_ansi_term::{Color, Style};
-use std::process::Command;
+use pty_process::Command as _;
+use std::{
+    io::Read,
+    process::{Command, Stdio},
+};
 
 const EXE: &str = env!("CARGO_BIN_EXE_pretty-exec");
 
@@ -23,6 +27,19 @@ fn expected_colorful_title() -> String {
         Color::Red.paint("-abc"),
         Color::Red.paint("--abc"),
     )
+}
+
+macro_rules! read_child_stdio {
+    ($child:expr, $field:ident) => {{
+        let mut output = String::new();
+        $child
+            .$field
+            .as_mut()
+            .expect(concat!("get ", stringify!($field)))
+            .read_to_string(&mut output)
+            .expect(concat!("read ", stringify!($field)));
+        output
+    }};
 }
 
 #[test]
@@ -66,6 +83,57 @@ fn color_never() {
     let expected_stdout = "hello --world -abc --abc=def\n".to_string();
     let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn color_auto_piped() {
+    let output = exe()
+        .arg("--color=auto")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stderr = "$ echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn color_auto_pty() {
+    let mut child = exe()
+        .arg("--color=auto")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn_pty(None)
+        .expect("spawn process in a pty");
+
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let expected_stderr = format!("{}\n", expected_colorful_title());
+    let actual_stdout = read_child_stdio!(child, stdout);
+    let actual_stderr = read_child_stdio!(child, stderr);
 
     assert_eq!(
         (actual_stderr, actual_stdout),
