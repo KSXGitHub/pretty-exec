@@ -1,7 +1,7 @@
 pub use nu_ansi_term as ansi_term;
 
 use super::{Log, Logger};
-use nu_ansi_term::{Color, Style};
+use nu_ansi_term::{AnsiGenericString, Color, Style};
 use pipe_trait::Pipe;
 use shell_escape::unix::escape;
 use std::{
@@ -74,12 +74,11 @@ where
 
         for argument in *arguments {
             let argument = argument.as_ref().to_string_lossy();
-            let paint = |text: &str, style: Style| {
-                text.to_owned()
-                    .pipe(Cow::from)
+            fn paint(text: &str, style: Style) -> AnsiGenericString<'_, str> {
+                text.pipe(Cow::from)
                     .pipe(escape)
-                    .pipe(|x| style.paint(x))
-            };
+                    .pipe(|text| style.paint(text))
+            }
             let argument = if argument.starts_with("--") {
                 let segments: Vec<_> = argument.splitn(2, '=').collect();
                 match segments[..] {
