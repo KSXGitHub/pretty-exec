@@ -1,20 +1,21 @@
 use super::log::{Log, Logger, Nothing};
 use std::{
+    ffi::OsStr,
     io,
     process::{Command, ExitStatus},
 };
 
 pub struct PrettyExec<'a, PreLog, PostLog> {
     prompt: &'a str,
-    program: &'a str,
-    arguments: Vec<&'a str>,
+    program: &'a OsStr,
+    arguments: Vec<&'a OsStr>,
     command: Command,
     log_before: PreLog,
     log_after: PostLog,
 }
 
 impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
-    pub fn arg(&mut self, arg: &'a str) -> &mut Self {
+    pub fn arg(&mut self, arg: &'a OsStr) -> &mut Self {
         self.arguments.push(arg);
         self.command.arg(arg);
         self
@@ -22,8 +23,8 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
 
     pub fn spawn(&'a mut self) -> io::Result<ExitStatus>
     where
-        Logger<'a, PreLog, str, str, Vec<&'a str>>: Log,
-        Logger<'a, PostLog, str, str, Vec<&'a str>>: Log,
+        Logger<'a, PreLog, str, OsStr, Vec<&'a OsStr>>: Log,
+        Logger<'a, PostLog, str, OsStr, Vec<&'a OsStr>>: Log,
     {
         Logger::new(&self.log_before, self.prompt, self.program, &self.arguments).log();
         let result = self.command.spawn()?.wait();
@@ -55,7 +56,7 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
 }
 
 impl<'a> PrettyExec<'a, Nothing, Nothing> {
-    pub fn new(prompt: &'a str, program: &'a str) -> Self {
+    pub fn new(prompt: &'a str, program: &'a OsStr) -> Self {
         PrettyExec {
             prompt,
             program,

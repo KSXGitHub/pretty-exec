@@ -6,18 +6,18 @@ use super::super::log::syntax_highlight::SyntaxHighLight;
 use super::Param;
 use clap::Parser;
 use is_terminal::IsTerminal;
-use std::io::stderr;
+use std::{ffi::OsString, io::stderr};
 
 #[derive(Parser)]
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
 pub struct Args {
     /// Program to execute
     #[clap(name = "program")]
-    program: String,
+    program: OsString,
 
     /// Arguments to pass to program
     #[clap(name = "arguments")]
-    arguments: Vec<String>,
+    arguments: Vec<OsString>,
 
     /// Customize the prompt before the command.
     #[clap(long, default_value = "$")]
@@ -43,7 +43,7 @@ impl Args {
 
     pub fn param(&'_ self) -> Param<'_> {
         Param {
-            program: self.program.as_str(),
+            program: self.program.as_os_str(),
             arguments: self.arguments.as_slice(),
             prompt: self.prompt.as_str(),
             skip_exec: self.skip_exec,

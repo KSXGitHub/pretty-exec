@@ -5,11 +5,14 @@ pub mod print_title;
 use super::{github_actions, log::syntax_highlight::SyntaxHighLight, Error, PrettyExec};
 use clap::Parser;
 use pipe_trait::Pipe;
-use std::process::ExitStatus;
+use std::{
+    ffi::{OsStr, OsString},
+    process::ExitStatus,
+};
 
 pub struct Param<'a> {
-    pub program: &'a str,
-    pub arguments: &'a [String],
+    pub program: &'a OsStr,
+    pub arguments: &'a [OsString],
     pub prompt: &'a str,
     pub skip_exec: bool,
     pub syntax_highlight: SyntaxHighLight,
