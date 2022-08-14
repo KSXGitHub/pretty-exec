@@ -26,7 +26,7 @@ fn expected_colorful_title() -> String {
 }
 
 #[test]
-fn color_always_stdout() {
+fn color_always() {
     let output = exe()
         .arg("--color=always")
         .arg("--")
@@ -50,7 +50,7 @@ fn color_always_stdout() {
 }
 
 #[test]
-fn color_never_stdout() {
+fn color_never() {
     let output = exe()
         .arg("--color=never")
         .arg("--")
