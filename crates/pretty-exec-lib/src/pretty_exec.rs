@@ -5,9 +5,9 @@ use std::{
 };
 
 pub struct PrettyExec<PreLog, PostLog> {
-    pub prompt: String,
-    pub program: String,
-    pub arguments: Vec<String>,
+    prompt: String,
+    program: String,
+    arguments: Vec<String>,
     command: Command,
     log_before: PreLog,
     log_after: PostLog,
