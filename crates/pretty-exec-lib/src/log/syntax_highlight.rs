@@ -28,7 +28,7 @@ pub struct SyntaxHighLight {
 
 impl SyntaxHighLight {
     pub fn colorless() -> Self {
-        SyntaxHighLight::builder().build()
+        Default::default()
     }
 
     pub fn colorful() -> Self {
