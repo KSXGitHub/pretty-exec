@@ -42,7 +42,7 @@ macro_rules! test_completion {
         #[test]
         fn $name() {
             eprintln!(
-                "check!({name}: {shell} => {path});",
+                "check!({name}: {shell} -> {path});",
                 name = stringify!($name),
                 shell = stringify!($shell),
                 path = $path,
