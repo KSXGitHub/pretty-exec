@@ -1,8 +1,7 @@
 pub use nu_ansi_term as ansi_term;
 
 use super::{Log, Logger};
-use derive_more::Display;
-use nu_ansi_term::{AnsiGenericString, Color, Style};
+use nu_ansi_term::{Color, Style};
 use pipe_trait::Pipe;
 use shell_escape::unix::escape;
 use std::{
@@ -14,8 +13,9 @@ use typed_builder::TypedBuilder;
 
 #[must_use]
 #[derive(TypedBuilder)]
-pub struct SyntaxHighLight<Prompt> {
-    pub prompt: Prompt,
+pub struct SyntaxHighLight {
+    #[builder(default)]
+    pub prompt: Style,
     #[builder(default)]
     pub program: Style,
     #[builder(default)]
@@ -26,32 +26,14 @@ pub struct SyntaxHighLight<Prompt> {
     pub long_flag: Style,
 }
 
-impl SyntaxHighLight<&'static str> {
-    const DEFAULT_PROMPT: &'static str = "$";
-}
-
-impl<Prompt> SyntaxHighLight<Prompt> {
-    pub fn colorless() -> Self
-    where
-        ColorlessPrompt: Into<Prompt>,
-    {
-        let prompt = SyntaxHighLight::DEFAULT_PROMPT.pipe(ColorlessPrompt).into();
-        SyntaxHighLight::builder().prompt(prompt).build()
+impl SyntaxHighLight {
+    pub fn colorless() -> Self {
+        SyntaxHighLight::builder().build()
     }
-}
 
-impl<Prompt> SyntaxHighLight<Prompt> {
-    pub fn colorful() -> Self
-    where
-        ColorfulPrompt: Into<Prompt>,
-    {
-        let prompt = Style::default()
-            .dimmed()
-            .paint(SyntaxHighLight::DEFAULT_PROMPT)
-            .pipe(ColorfulPrompt)
-            .into();
+    pub fn colorful() -> Self {
         SyntaxHighLight::builder()
-            .prompt(prompt)
+            .prompt(Style::new().dimmed())
             .program(Color::Green.into())
             .short_flag(Color::Red.into())
             .long_flag(Color::Red.into())
@@ -59,10 +41,10 @@ impl<Prompt> SyntaxHighLight<Prompt> {
     }
 }
 
-impl<'a, Prompt, Program: ?Sized, Arguments: ?Sized> Display
-    for Logger<'a, SyntaxHighLight<Prompt>, Program, Arguments>
+impl<'a, Prompt: ?Sized, Program: ?Sized, Arguments: ?Sized> Display
+    for Logger<'a, SyntaxHighLight, Prompt, Program, Arguments>
 where
-    Prompt: Display,
+    &'a Prompt: Display,
     &'a Program: AsRef<OsStr>,
     &'a Arguments: IntoIterator,
     <&'a Arguments as IntoIterator>::Item: AsRef<OsStr>,
@@ -70,13 +52,14 @@ where
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let Logger {
             method,
+            prompt,
             program,
             arguments,
         } = self;
 
-        let prompt = method.prompt.to_string();
+        let prompt = prompt.to_string();
         if !prompt.is_empty() {
-            write!(f, "{prompt} ")?;
+            write!(f, "{} ", method.prompt.paint(prompt))?;
         }
 
         write!(
@@ -121,28 +104,15 @@ where
     }
 }
 
-impl<'a, Prompt, Program: ?Sized, Arguments: ?Sized> Log
-    for Logger<'a, SyntaxHighLight<Prompt>, Program, Arguments>
+impl<'a, Prompt: ?Sized, Program: ?Sized, Arguments: ?Sized> Log
+    for Logger<'a, SyntaxHighLight, Prompt, Program, Arguments>
 where
-    Prompt: Display,
+    &'a Prompt: Display,
     &'a Program: AsRef<OsStr>,
     &'a Arguments: IntoIterator,
     <&'a Arguments as IntoIterator>::Item: AsRef<OsStr>,
 {
     fn log(&self) {
         eprintln!("{self}");
-    }
-}
-
-#[derive(Display)]
-pub struct ColorlessPrompt(&'static str);
-
-#[derive(Display)]
-pub struct ColorfulPrompt(AnsiGenericString<'static, str>);
-
-impl From<ColorlessPrompt> for ColorfulPrompt {
-    fn from(prompt: ColorlessPrompt) -> Self {
-        let ColorlessPrompt(prompt) = prompt;
-        prompt.pipe(AnsiGenericString::from).pipe(ColorfulPrompt)
     }
 }

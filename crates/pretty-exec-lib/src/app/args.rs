@@ -2,7 +2,7 @@ pub mod when;
 
 pub use when::When;
 
-use super::super::log::syntax_highlight::{ColorfulPrompt, SyntaxHighLight};
+use super::super::log::syntax_highlight::SyntaxHighLight;
 use super::Param;
 use clap::Parser;
 use is_terminal::IsTerminal;
@@ -33,7 +33,7 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn syntax_highlight(&self) -> SyntaxHighLight<ColorfulPrompt> {
+    pub fn syntax_highlight(&self) -> SyntaxHighLight {
         ColorMode::new(self.color, self.github_actions, stderr().is_terminal()).syntax_highlight()
     }
 
@@ -71,7 +71,7 @@ impl ColorMode {
         ColorMode::Colorless
     }
 
-    fn syntax_highlight(self) -> SyntaxHighLight<ColorfulPrompt> {
+    fn syntax_highlight(self) -> SyntaxHighLight {
         match self {
             ColorMode::Colorless => SyntaxHighLight::colorless(),
             ColorMode::Colorful => SyntaxHighLight::colorful(),

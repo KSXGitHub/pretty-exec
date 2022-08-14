@@ -21,12 +21,12 @@ impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
 
     pub fn spawn<'a>(&'a mut self) -> io::Result<ExitStatus>
     where
-        Logger<'a, PreLog, String, Vec<String>>: Log,
-        Logger<'a, PostLog, String, Vec<String>>: Log,
+        Logger<'a, PreLog, char, String, Vec<String>>: Log,
+        Logger<'a, PostLog, char, String, Vec<String>>: Log,
     {
-        Logger::new(&self.log_before, &self.program, &self.arguments).log();
+        Logger::new(&self.log_before, &'$', &self.program, &self.arguments).log();
         let result = self.command.spawn()?.wait();
-        Logger::new(&self.log_after, &self.program, &self.arguments).log();
+        Logger::new(&self.log_after, &'$', &self.program, &self.arguments).log();
         result
     }
 

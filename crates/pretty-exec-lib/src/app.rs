@@ -2,11 +2,7 @@ pub mod args;
 pub mod exec;
 pub mod print_title;
 
-use super::{
-    github_actions,
-    log::syntax_highlight::{ColorfulPrompt, SyntaxHighLight},
-    Error, PrettyExec,
-};
+use super::{github_actions, log::syntax_highlight::SyntaxHighLight, Error, PrettyExec};
 use clap::Parser;
 use pipe_trait::Pipe;
 use std::process::ExitStatus;
@@ -15,7 +11,7 @@ pub struct Param<'a> {
     pub program: &'a str,
     pub arguments: &'a [String],
     pub skip_exec: bool,
-    pub syntax_highlight: SyntaxHighLight<ColorfulPrompt>,
+    pub syntax_highlight: SyntaxHighLight,
     pub support_github_action: bool,
 }
 
