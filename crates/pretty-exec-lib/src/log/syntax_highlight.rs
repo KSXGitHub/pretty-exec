@@ -44,7 +44,7 @@ impl SyntaxHighLight {
 impl<'a, Prompt: ?Sized, Program: ?Sized, Arguments: ?Sized> Display
     for Logger<'a, SyntaxHighLight, Prompt, Program, Arguments>
 where
-    &'a Prompt: Display,
+    &'a Prompt: AsRef<str>,
     &'a Program: AsRef<OsStr>,
     &'a Arguments: IntoIterator,
     <&'a Arguments as IntoIterator>::Item: AsRef<OsStr>,
@@ -57,7 +57,7 @@ where
             arguments,
         } = self;
 
-        let prompt = prompt.to_string();
+        let prompt = prompt.as_ref();
         if !prompt.is_empty() {
             write!(f, "{} ", method.prompt.paint(prompt))?;
         }
@@ -107,7 +107,7 @@ where
 impl<'a, Prompt: ?Sized, Program: ?Sized, Arguments: ?Sized> Log
     for Logger<'a, SyntaxHighLight, Prompt, Program, Arguments>
 where
-    &'a Prompt: Display,
+    &'a Prompt: AsRef<str>,
     &'a Program: AsRef<OsStr>,
     &'a Arguments: IntoIterator,
     <&'a Arguments as IntoIterator>::Item: AsRef<OsStr>,

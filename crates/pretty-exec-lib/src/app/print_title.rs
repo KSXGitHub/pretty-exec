@@ -12,8 +12,8 @@ pub fn print_title(param: Param) {
 
     if support_github_action {
         let method = github_actions::GroupOpening::from(syntax_highlight);
-        Logger::new(&method, &'$', program, arguments).log();
+        Logger::new(&method, "$", program, arguments).log();
     } else {
-        Logger::new(&syntax_highlight, &'$', program, arguments).log();
+        Logger::new(&syntax_highlight, "$", program, arguments).log();
     }
 }
