@@ -12,7 +12,7 @@ use std::{
 use typed_builder::TypedBuilder;
 
 #[must_use]
-#[derive(TypedBuilder)]
+#[derive(Default, TypedBuilder)]
 pub struct SyntaxHighLight {
     #[builder(default)]
     pub prompt: Style,
