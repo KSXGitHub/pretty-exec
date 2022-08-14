@@ -19,12 +19,16 @@ _pretty-exec() {
 
     case "${cmd}" in
         pretty__exec)
-            opts="-h -V --help --version --skip-exec --color --github-actions <program> <arguments>..."
+            opts="-h -V --help --version --prompt --skip-exec --color --github-actions <program> <arguments>..."
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
+                --prompt)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 --color)
                     COMPREPLY=($(compgen -W "auto never always" -- "${cur}"))
                     return 0

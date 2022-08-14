@@ -19,6 +19,10 @@ pub struct Args {
     #[clap(name = "arguments")]
     arguments: Vec<String>,
 
+    /// Customize the prompt before the command.
+    #[clap(long, default_value = "$")]
+    prompt: String,
+
     /// Do not execute, print command only
     #[clap(long)]
     skip_exec: bool,
@@ -41,6 +45,7 @@ impl Args {
         Param {
             program: self.program.as_str(),
             arguments: self.arguments.as_ref(),
+            prompt: self.prompt.as_str(),
             skip_exec: self.skip_exec,
             support_github_action: self.github_actions,
             syntax_highlight: self.syntax_highlight(),

@@ -5,6 +5,7 @@ use std::{
 };
 
 pub struct PrettyExec<PreLog, PostLog> {
+    pub prompt: String,
     pub program: String,
     pub arguments: Vec<String>,
     command: Command,
@@ -21,17 +22,30 @@ impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
 
     pub fn spawn<'a>(&'a mut self) -> io::Result<ExitStatus>
     where
-        Logger<'a, PreLog, str, String, Vec<String>>: Log,
-        Logger<'a, PostLog, str, String, Vec<String>>: Log,
+        Logger<'a, PreLog, String, String, Vec<String>>: Log,
+        Logger<'a, PostLog, String, String, Vec<String>>: Log,
     {
-        Logger::new(&self.log_before, "$", &self.program, &self.arguments).log();
+        Logger::new(
+            &self.log_before,
+            &self.prompt,
+            &self.program,
+            &self.arguments,
+        )
+        .log();
         let result = self.command.spawn()?.wait();
-        Logger::new(&self.log_after, "$", &self.program, &self.arguments).log();
+        Logger::new(
+            &self.log_after,
+            &self.prompt,
+            &self.program,
+            &self.arguments,
+        )
+        .log();
         result
     }
 
     pub fn set_log_before<Logger>(self, log_before: Logger) -> PrettyExec<Logger, PostLog> {
         PrettyExec {
+            prompt: self.prompt,
             program: self.program,
             arguments: self.arguments,
             command: self.command,
@@ -42,6 +56,7 @@ impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
 
     pub fn set_log_after<Logger>(self, log_after: Logger) -> PrettyExec<PreLog, Logger> {
         PrettyExec {
+            prompt: self.prompt,
             program: self.program,
             arguments: self.arguments,
             command: self.command,
@@ -52,8 +67,9 @@ impl<PreLog, PostLog> PrettyExec<PreLog, PostLog> {
 }
 
 impl PrettyExec<Nothing, Nothing> {
-    pub fn new(program: &str) -> Self {
+    pub fn new(prompt: &str, program: &str) -> Self {
         PrettyExec {
+            prompt: prompt.to_owned(),
             program: program.to_owned(),
             log_before: Nothing,
             log_after: Nothing,

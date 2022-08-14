@@ -15,6 +15,7 @@ _pretty-exec() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" \
+'--prompt=[Customize the prompt before the command]:PROMPT: ' \
 '--color=[When to use color]:color:(auto never always)' \
 '-h[Print help information]' \
 '--help[Print help information]' \

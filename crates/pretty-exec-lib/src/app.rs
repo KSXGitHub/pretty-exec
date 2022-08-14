@@ -10,6 +10,7 @@ use std::process::ExitStatus;
 pub struct Param<'a> {
     pub program: &'a str,
     pub arguments: &'a [String],
+    pub prompt: &'a str,
     pub skip_exec: bool,
     pub syntax_highlight: SyntaxHighLight,
     pub support_github_action: bool,

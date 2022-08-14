@@ -21,6 +21,7 @@ Register-ArgumentCompleter -Native -CommandName 'pretty-exec' -ScriptBlock {
 
     $completions = @(switch ($command) {
         'pretty-exec' {
+            [CompletionResult]::new('--prompt', 'prompt', [CompletionResultType]::ParameterName, 'Customize the prompt before the command')
             [CompletionResult]::new('--color', 'color', [CompletionResultType]::ParameterName, 'When to use color')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help information')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help information')

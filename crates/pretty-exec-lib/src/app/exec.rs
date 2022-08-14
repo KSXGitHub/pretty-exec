@@ -4,11 +4,12 @@ pub fn exec(param: Param) -> Result<ExitStatus, Error> {
     let Param {
         program,
         arguments,
+        prompt,
         syntax_highlight,
         support_github_action,
         ..
     } = param;
-    let mut pretty_exec = PrettyExec::new(program);
+    let mut pretty_exec = PrettyExec::new(prompt, program);
 
     for argument in arguments {
         pretty_exec.arg(argument);

@@ -18,6 +18,7 @@ set edit:completion:arg-completer[pretty-exec] = {|@words|
     }
     var completions = [
         &'pretty-exec'= {
+            cand --prompt 'Customize the prompt before the command'
             cand --color 'When to use color'
             cand -h 'Print help information'
             cand --help 'Print help information'

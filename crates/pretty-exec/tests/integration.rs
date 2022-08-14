@@ -74,6 +74,54 @@ fn color_never() {
 }
 
 #[test]
+fn different_prompt() {
+    let output = exe()
+        .arg("--prompt=>>>")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stderr = ">>> echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn empty_prompt() {
+    let output = exe()
+        .arg("--prompt=")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stderr = "echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
 fn github_actions() {
     let output = exe()
         .arg("--github-actions")
