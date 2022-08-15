@@ -1,7 +1,7 @@
 pub use nu_ansi_term as ansi_term;
 
 use super::{Log, Logger};
-use nu_ansi_term::{AnsiGenericString, Color, Style};
+use nu_ansi_term::{Color, Style};
 use pipe_trait::Pipe;
 use shell_escape::unix::escape;
 use std::{
@@ -74,7 +74,7 @@ where
 
         for argument in *arguments {
             let argument = argument.as_ref().to_string_lossy();
-            fn paint_escape(text: &str, style: Style) -> AnsiGenericString<'_, str> {
+            fn paint_escape(text: &str, style: Style) -> impl Display + '_ {
                 text.pipe(Cow::from)
                     .pipe(escape)
                     .pipe(|text| style.paint(text))
