@@ -74,28 +74,26 @@ where
 
         for argument in *arguments {
             let argument = argument.as_ref().to_string_lossy();
-            fn paint_escape(text: &str, style: Style) -> impl Display + '_ {
-                text.pipe(Cow::from)
-                    .pipe(escape)
-                    .pipe(|text| style.paint(text))
+            fn paint_escape(text: Cow<str>, style: Style) -> impl Display + '_ {
+                text.pipe(escape).pipe(|text| style.paint(text))
             }
             if argument.starts_with("--") {
                 let mut segments = argument.splitn(2, '=');
                 match (segments.next(), segments.next()) {
-                    (Some(_), None) => write!(f, " {}", paint_escape(&argument, method.long_flag))?,
+                    (Some(_), None) => write!(f, " {}", paint_escape(argument, method.long_flag))?,
                     (Some(flag), Some(val)) => write!(
                         f,
                         " {flag}{eq}{val}",
-                        flag = paint_escape(flag, method.long_flag),
+                        flag = paint_escape(flag.into(), method.long_flag),
                         eq = method.argument.paint("="),
-                        val = paint_escape(val, method.argument),
+                        val = paint_escape(val.into(), method.argument),
                     )?,
                     _ => unreachable!(),
                 }
             } else if argument.starts_with('-') {
-                write!(f, " {}", paint_escape(&argument, method.short_flag))?
+                write!(f, " {}", paint_escape(argument, method.short_flag))?
             } else {
-                write!(f, " {}", paint_escape(&argument, method.argument))?
+                write!(f, " {}", paint_escape(argument, method.argument))?
             };
         }
 
