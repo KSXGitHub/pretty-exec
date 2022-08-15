@@ -74,7 +74,7 @@ where
 
         for argument in *arguments {
             let argument = argument.as_ref().to_string_lossy();
-            fn paint(text: &str, style: Style) -> AnsiGenericString<'_, str> {
+            fn paint_escape(text: &str, style: Style) -> AnsiGenericString<'_, str> {
                 text.pipe(Cow::from)
                     .pipe(escape)
                     .pipe(|text| style.paint(text))
@@ -82,19 +82,19 @@ where
             let argument = if argument.starts_with("--") {
                 let segments: Vec<_> = argument.splitn(2, '=').collect();
                 match segments[..] {
-                    [_] => paint(&argument, method.long_flag),
+                    [_] => paint_escape(&argument, method.long_flag),
                     [flag, val] => Style::default().paint(format!(
                         "{flag}{eq}{val}",
-                        flag = paint(flag, method.long_flag),
+                        flag = paint_escape(flag, method.long_flag),
                         eq = method.argument.paint("="),
-                        val = paint(val, method.argument),
+                        val = paint_escape(val, method.argument),
                     )),
                     _ => unreachable!(),
                 }
             } else if argument.starts_with('-') {
-                paint(&argument, method.short_flag)
+                paint_escape(&argument, method.short_flag)
             } else {
-                paint(&argument, method.argument)
+                paint_escape(&argument, method.argument)
             };
             write!(f, " {argument}")?;
         }
