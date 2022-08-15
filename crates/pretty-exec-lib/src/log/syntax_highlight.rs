@@ -79,24 +79,24 @@ where
                     .pipe(escape)
                     .pipe(|text| style.paint(text))
             }
-            let argument = if argument.starts_with("--") {
+            if argument.starts_with("--") {
                 let segments: Vec<_> = argument.splitn(2, '=').collect();
                 match segments[..] {
-                    [_] => paint_escape(&argument, method.long_flag),
-                    [flag, val] => Style::default().paint(format!(
-                        "{flag}{eq}{val}",
+                    [_] => write!(f, " {}", paint_escape(&argument, method.long_flag))?,
+                    [flag, val] => write!(
+                        f,
+                        " {flag}{eq}{val}",
                         flag = paint_escape(flag, method.long_flag),
                         eq = method.argument.paint("="),
                         val = paint_escape(val, method.argument),
-                    )),
+                    )?,
                     _ => unreachable!(),
                 }
             } else if argument.starts_with('-') {
-                paint_escape(&argument, method.short_flag)
+                write!(f, " {}", paint_escape(&argument, method.short_flag))?
             } else {
-                paint_escape(&argument, method.argument)
+                write!(f, " {}", paint_escape(&argument, method.argument))?
             };
-            write!(f, " {argument}")?;
         }
 
         Ok(())
