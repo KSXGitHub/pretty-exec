@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 mkdir -p exports
 
 gen() {
-  ./run.sh pretty-exec-completions "$1" -o "exports/$2"
+  ./run.sh pretty-exec-completions --name='pretty-exec' --shell="$1" --output="exports/$2"
 }
 
 gen bash completion.bash

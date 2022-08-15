@@ -4,14 +4,23 @@ description = "Print a command and then execute it"
 version = "0.0.37"
 authors = ["khai96_ <hvksmr1996@gmail.com>"]
 license = "MIT"
-edition = "2018"
+edition = "2021"
 keywords = ["spawn", "subprocess", "command"]
 repository = "https://github.com/KSXGitHub/pretty-exec.git"
 readme = "README.md"
 
 [dependencies]
-ansi_term = "^0.12.1"
+is-terminal = "^0.3.0"
+nu-ansi-term = "^0.46.0"
 shell-escape = "^0.1.5"
-structopt = "^0.3.26"
-structopt-utilities = "^0.1.0"
-pipe-trait = "^0.3.2"
+derive_more = "^0.99.17"
+typed-builder = "^0.10.0"
+thiserror = "^1.0.32"
+clap = { version = "3.2.16", features = ["derive"] }
+clap-utilities = "0.1.0"
+pipe-trait = "^0.4.0"
+
+[dev-dependencies]
+itertools = "^0.10.3"
+pretty_assertions = "^1.2.1"
+maplit = "^1.0.2"

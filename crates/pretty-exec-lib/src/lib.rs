@@ -1,10 +1,14 @@
-pub mod logger;
-pub mod main;
+pub mod app;
+pub mod error;
+pub mod log;
 pub mod pretty_exec;
 pub mod sub;
 
-pub use logger::*;
-pub use main::*;
+pub use app::*;
+pub use error::*;
+pub use log::*;
 pub use pretty_exec::*;
 
-pub use structopt_utilities::{self, clap, structopt};
+pub use clap;
+pub use clap_utilities;
+pub use clap_utilities::clap_complete;

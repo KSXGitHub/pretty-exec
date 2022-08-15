@@ -1,5 +1,5 @@
 #![cfg(test)]
-use ansi_term::*;
+use nu_ansi_term::{Color, Style};
 use std::process::Command;
 
 const EXE: &str = env!("CARGO_BIN_EXE_pretty-exec");
@@ -26,8 +26,9 @@ fn expected_colorful_title() -> String {
 }
 
 #[test]
-fn default_stdout() {
+fn color_always() {
     let output = exe()
+        .arg("--color=always")
         .arg("--")
         .arg("echo")
         .arg("hello")
@@ -49,7 +50,7 @@ fn default_stdout() {
 }
 
 #[test]
-fn color_never_stdout() {
+fn color_never() {
     let output = exe()
         .arg("--color=never")
         .arg("--")
@@ -62,6 +63,54 @@ fn color_never_stdout() {
         .unwrap();
 
     let expected_stderr = "$ echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn different_prompt() {
+    let output = exe()
+        .arg("--prompt=>>>")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stderr = ">>> echo hello --world -abc --abc=def\n".to_string();
+    let expected_stdout = "hello --world -abc --abc=def\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
+fn empty_prompt() {
+    let output = exe()
+        .arg("--prompt=")
+        .arg("--")
+        .arg("echo")
+        .arg("hello")
+        .arg("--world")
+        .arg("-abc")
+        .arg("--abc=def")
+        .output()
+        .unwrap();
+
+    let expected_stderr = "echo hello --world -abc --abc=def\n".to_string();
     let expected_stdout = "hello --world -abc --abc=def\n".to_string();
     let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
@@ -87,7 +136,7 @@ fn github_actions() {
 
     let expected_stdout = format!(
         "{cmd}\n{output}\n{endgroup}\n",
-        cmd = format!("::group::{}", expected_colorful_title()),
+        cmd = format_args!("::group::{}", expected_colorful_title()),
         output = "hello --world -abc --abc=def",
         endgroup = "::endgroup::",
     );
@@ -136,7 +185,7 @@ fn skip_exec_stdout() {
         .output()
         .unwrap();
 
-    let expected_stderr = format!("{}\n", expected_colorful_title());
+    let expected_stderr = "$ echo hello --world -abc --abc=def\n".to_string();
     let expected_stdout = "".to_string();
     let actual_stderr = u8v_to_utf8(&output.stderr);
     let actual_stdout = u8v_to_utf8(&output.stdout);
