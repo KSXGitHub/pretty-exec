@@ -62,15 +62,8 @@ where
             write!(f, "{} ", method.prompt.paint(prompt))?;
         }
 
-        write!(
-            f,
-            "{}",
-            program
-                .as_ref()
-                .to_string_lossy()
-                .pipe(escape)
-                .pipe(|x| method.program.paint(x))
-        )?;
+        let program = program.as_ref().to_string_lossy().pipe(escape);
+        write!(f, "{}", method.program.paint(program))?;
 
         for argument in *arguments {
             let argument = argument.as_ref().to_string_lossy();
