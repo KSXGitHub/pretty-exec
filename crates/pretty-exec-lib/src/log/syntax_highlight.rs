@@ -80,10 +80,10 @@ where
                     .pipe(|text| style.paint(text))
             }
             if argument.starts_with("--") {
-                let segments: Vec<_> = argument.splitn(2, '=').collect();
-                match segments[..] {
-                    [_] => write!(f, " {}", paint_escape(&argument, method.long_flag))?,
-                    [flag, val] => write!(
+                let mut segments = argument.splitn(2, '=');
+                match (segments.next(), segments.next()) {
+                    (Some(_), None) => write!(f, " {}", paint_escape(&argument, method.long_flag))?,
+                    (Some(flag), Some(val)) => write!(
                         f,
                         " {flag}{eq}{val}",
                         flag = paint_escape(flag, method.long_flag),
