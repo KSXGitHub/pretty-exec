@@ -1,6 +1,6 @@
 use super::log::{Log, Logger, Nothing};
 use std::{
-    ffi::OsStr,
+    ffi::{OsStr, OsString},
     io,
     process::{Command, ExitStatus},
 };
@@ -8,27 +8,23 @@ use std::{
 pub struct PrettyExec<'a, PreLog, PostLog> {
     prompt: &'a str,
     program: &'a OsStr,
-    arguments: Vec<&'a OsStr>,
-    command: Command,
+    arguments: &'a [OsString],
     log_before: PreLog,
     log_after: PostLog,
 }
 
 impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
-    pub fn arg(&mut self, arg: &'a OsStr) -> &mut Self {
-        self.arguments.push(arg);
-        self.command.arg(arg);
-        self
-    }
-
     pub fn spawn(&'a mut self) -> io::Result<ExitStatus>
     where
-        Logger<'a, PreLog, str, OsStr, Vec<&'a OsStr>>: Log,
-        Logger<'a, PostLog, str, OsStr, Vec<&'a OsStr>>: Log,
+        Logger<'a, PreLog, str, OsStr, [OsString]>: Log,
+        Logger<'a, PostLog, str, OsStr, [OsString]>: Log,
     {
-        Logger::new(&self.log_before, self.prompt, self.program, &self.arguments).log();
-        let result = self.command.spawn()?.wait();
-        Logger::new(&self.log_after, self.prompt, self.program, &self.arguments).log();
+        Logger::new(&self.log_before, self.prompt, self.program, self.arguments).log();
+        let result = Command::new(self.program)
+            .args(self.arguments)
+            .spawn()?
+            .wait();
+        Logger::new(&self.log_after, self.prompt, self.program, self.arguments).log();
         result
     }
 
@@ -37,7 +33,6 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
             prompt: self.prompt,
             program: self.program,
             arguments: self.arguments,
-            command: self.command,
             log_after: self.log_after,
             log_before,
         }
@@ -48,7 +43,6 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
             prompt: self.prompt,
             program: self.program,
             arguments: self.arguments,
-            command: self.command,
             log_before: self.log_before,
             log_after,
         }
@@ -56,14 +50,13 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
 }
 
 impl<'a> PrettyExec<'a, Nothing, Nothing> {
-    pub fn new(prompt: &'a str, program: &'a OsStr) -> Self {
+    pub fn new(prompt: &'a str, program: &'a OsStr, arguments: &'a [OsString]) -> Self {
         PrettyExec {
             prompt,
             program,
+            arguments,
             log_before: Nothing,
             log_after: Nothing,
-            arguments: Vec::new(),
-            command: Command::new(program),
         }
     }
 }
