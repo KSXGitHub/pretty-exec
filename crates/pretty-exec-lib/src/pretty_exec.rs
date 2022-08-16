@@ -18,7 +18,7 @@ pub struct PrettyExec<Prompt, Program, Arguments, PreLog, PostLog> {
 impl<Prompt, Program, Arguments, PreLog, PostLog>
     PrettyExec<Prompt, Program, Arguments, PreLog, PostLog>
 {
-    pub fn spawn<'a>(&'a mut self) -> io::Result<ExitStatus>
+    pub fn spawn<'a>(&'a self) -> io::Result<ExitStatus>
     where
         Prompt: Deref,
         Program: AsRef<OsStr> + Deref,
