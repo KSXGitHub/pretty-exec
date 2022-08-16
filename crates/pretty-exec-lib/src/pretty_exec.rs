@@ -1,4 +1,5 @@
 use super::log::{Log, Logger, Nothing};
+use pipe_trait::Pipe;
 use std::{
     ffi::OsStr,
     io,
@@ -34,7 +35,9 @@ impl<Prompt, Program, Arguments, PreLog, PostLog>
             self.arguments.deref(),
         )
         .log();
-        let result = Command::new(&self.program)
+        let result = self
+            .program
+            .pipe_ref(Command::new)
             .args(self.arguments.deref())
             .spawn()?
             .wait();
