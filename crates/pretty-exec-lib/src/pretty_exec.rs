@@ -1,34 +1,57 @@
 use super::log::{Log, Logger, Nothing};
 use std::{
-    ffi::{OsStr, OsString},
+    ffi::OsStr,
     io,
+    ops::Deref,
     process::{Command, ExitStatus},
 };
 
-pub struct PrettyExec<'a, PreLog, PostLog> {
-    prompt: &'a str,
-    program: &'a OsStr,
-    arguments: &'a [OsString],
+pub struct PrettyExec<Prompt, Program, Arguments, PreLog, PostLog> {
+    prompt: Prompt,
+    program: Program,
+    arguments: Arguments,
     log_before: PreLog,
     log_after: PostLog,
 }
 
-impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
-    pub fn spawn(&'a mut self) -> io::Result<ExitStatus>
+impl<Prompt, Program, Arguments, PreLog, PostLog>
+    PrettyExec<Prompt, Program, Arguments, PreLog, PostLog>
+{
+    pub fn spawn<'a>(&'a mut self) -> io::Result<ExitStatus>
     where
-        Logger<'a, PreLog, str, OsStr, [OsString]>: Log,
-        Logger<'a, PostLog, str, OsStr, [OsString]>: Log,
+        Prompt: Deref,
+        Program: AsRef<OsStr> + Deref,
+        Arguments: Deref,
+        &'a Arguments::Target: IntoIterator,
+        <&'a Arguments::Target as IntoIterator>::Item: AsRef<OsStr>,
+        Logger<'a, PreLog, Prompt::Target, Program::Target, Arguments::Target>: Log,
+        Logger<'a, PostLog, Prompt::Target, Program::Target, Arguments::Target>: Log,
     {
-        Logger::new(&self.log_before, self.prompt, self.program, self.arguments).log();
-        let result = Command::new(self.program)
-            .args(self.arguments)
+        Logger::new(
+            &self.log_before,
+            self.prompt.deref(),
+            self.program.deref(),
+            self.arguments.deref(),
+        )
+        .log();
+        let result = Command::new(&self.program)
+            .args(self.arguments.deref())
             .spawn()?
             .wait();
-        Logger::new(&self.log_after, self.prompt, self.program, self.arguments).log();
+        Logger::new(
+            &self.log_after,
+            self.prompt.deref(),
+            self.program.deref(),
+            self.arguments.deref(),
+        )
+        .log();
         result
     }
 
-    pub fn set_log_before<Logger>(self, log_before: Logger) -> PrettyExec<'a, Logger, PostLog> {
+    pub fn set_log_before<Logger>(
+        self,
+        log_before: Logger,
+    ) -> PrettyExec<Prompt, Program, Arguments, Logger, PostLog> {
         PrettyExec {
             prompt: self.prompt,
             program: self.program,
@@ -38,7 +61,10 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
         }
     }
 
-    pub fn set_log_after<Logger>(self, log_after: Logger) -> PrettyExec<'a, PreLog, Logger> {
+    pub fn set_log_after<Logger>(
+        self,
+        log_after: Logger,
+    ) -> PrettyExec<Prompt, Program, Arguments, PreLog, Logger> {
         PrettyExec {
             prompt: self.prompt,
             program: self.program,
@@ -49,8 +75,8 @@ impl<'a, PreLog, PostLog> PrettyExec<'a, PreLog, PostLog> {
     }
 }
 
-impl<'a> PrettyExec<'a, Nothing, Nothing> {
-    pub fn new(prompt: &'a str, program: &'a OsStr, arguments: &'a [OsString]) -> Self {
+impl<Prompt, Program, Arguments> PrettyExec<Prompt, Program, Arguments, Nothing, Nothing> {
+    pub fn new(prompt: Prompt, program: Program, arguments: Arguments) -> Self {
         PrettyExec {
             prompt,
             program,
