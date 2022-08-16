@@ -8,11 +8,11 @@ use std::{
 };
 
 pub struct PrettyExec<Prompt, Program, Arguments, PreLog, PostLog> {
-    prompt: Prompt,
-    program: Program,
-    arguments: Arguments,
-    log_before: PreLog,
-    log_after: PostLog,
+    pub prompt: Prompt,
+    pub program: Program,
+    pub arguments: Arguments,
+    pub log_before: PreLog,
+    pub log_after: PostLog,
 }
 
 impl<Prompt, Program, Arguments, PreLog, PostLog>
