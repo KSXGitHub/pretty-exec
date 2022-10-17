@@ -17,12 +17,12 @@ _pretty-exec() {
     _arguments "${_arguments_options[@]}" \
 '--prompt=[Customize the prompt before the command]:PROMPT: ' \
 '--color=[When to use color]:color:(auto never always)' \
+'--skip-exec[Do not execute, print command only]' \
+'--github-actions[Enable GitHub Action grouping]' \
 '-h[Print help information]' \
 '--help[Print help information]' \
 '-V[Print version information]' \
 '--version[Print version information]' \
-'--skip-exec[Do not execute, print command only]' \
-'--github-actions[Enable GitHub Action grouping]' \
 ':program -- Program to execute:' \
 '*::arguments -- Arguments to pass to program:' \
 && ret=0

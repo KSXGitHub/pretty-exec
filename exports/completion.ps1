@@ -23,12 +23,12 @@ Register-ArgumentCompleter -Native -CommandName 'pretty-exec' -ScriptBlock {
         'pretty-exec' {
             [CompletionResult]::new('--prompt', 'prompt', [CompletionResultType]::ParameterName, 'Customize the prompt before the command')
             [CompletionResult]::new('--color', 'color', [CompletionResultType]::ParameterName, 'When to use color')
+            [CompletionResult]::new('--skip-exec', 'skip-exec', [CompletionResultType]::ParameterName, 'Do not execute, print command only')
+            [CompletionResult]::new('--github-actions', 'github-actions', [CompletionResultType]::ParameterName, 'Enable GitHub Action grouping')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help information')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help information')
             [CompletionResult]::new('-V', 'V', [CompletionResultType]::ParameterName, 'Print version information')
             [CompletionResult]::new('--version', 'version', [CompletionResultType]::ParameterName, 'Print version information')
-            [CompletionResult]::new('--skip-exec', 'skip-exec', [CompletionResultType]::ParameterName, 'Do not execute, print command only')
-            [CompletionResult]::new('--github-actions', 'github-actions', [CompletionResultType]::ParameterName, 'Enable GitHub Action grouping')
             break
         }
     })

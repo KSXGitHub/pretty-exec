@@ -8,8 +8,8 @@ _pretty-exec() {
 
     for i in ${COMP_WORDS[@]}
     do
-        case "${i}" in
-            "$1")
+        case "${cmd},${i}" in
+            ",$1")
                 cmd="pretty__exec"
                 ;;
             *)
@@ -19,7 +19,7 @@ _pretty-exec() {
 
     case "${cmd}" in
         pretty__exec)
-            opts="-h -V --help --version --prompt --skip-exec --color --github-actions <program> <arguments>..."
+            opts="-h -V --prompt --skip-exec --color --github-actions --help --version <program> [arguments]..."
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
