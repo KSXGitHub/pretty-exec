@@ -23,8 +23,7 @@ _pretty-exec() {
 '--help[Print help information]' \
 '-V[Print version information]' \
 '--version[Print version information]' \
-':program -- Program to execute:_command_names -e' \
-'*::arguments -- Arguments to pass to program:' \
+'*::command -- Command to execute:_cmdambivalent' \
 && ret=0
 }
 

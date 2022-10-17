@@ -19,7 +19,7 @@ _pretty-exec() {
 
     case "${cmd}" in
         pretty__exec)
-            opts="-h -V --prompt --skip-exec --color --github-actions --help --version <program> [arguments]..."
+            opts="-h -V --prompt --skip-exec --color --github-actions --help --version [command]..."
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

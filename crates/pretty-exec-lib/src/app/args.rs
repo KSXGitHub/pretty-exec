@@ -11,13 +11,9 @@ use std::{ffi::OsString, io::stderr};
 #[derive(Parser)]
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
 pub struct Args {
-    /// Program to execute
-    #[clap(name = "program", value_hint = ValueHint::CommandName)]
-    program: OsString,
-
-    /// Arguments to pass to program
-    #[clap(name = "arguments", value_hint = ValueHint::Unknown)]
-    arguments: Vec<OsString>,
+    /// Command to execute
+    #[clap(name = "command", value_hint = ValueHint::CommandWithArguments, trailing_var_arg = true)]
+    command: Vec<OsString>,
 
     /// Customize the prompt before the command.
     #[clap(long, default_value = "$")]
@@ -48,8 +44,8 @@ impl Args {
 
     pub fn param(&'_ self) -> Param<'_> {
         Param {
-            program: self.program.as_os_str(),
-            arguments: self.arguments.as_slice(),
+            program: self.command[0].as_os_str(),
+            arguments: &self.command[1..],
             prompt: self.prompt.as_str(),
             skip_exec: self.skip_exec,
             support_github_action: self.github_actions,
