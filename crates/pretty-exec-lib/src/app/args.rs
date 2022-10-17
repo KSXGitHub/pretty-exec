@@ -2,7 +2,7 @@ pub mod when;
 
 pub use when::When;
 
-use super::super::log::syntax_highlight::SyntaxHighLight;
+use super::super::{error::Error, log::syntax_highlight::SyntaxHighLight};
 use super::Param;
 use clap::{Parser, ValueHint};
 use is_terminal::IsTerminal;
@@ -42,15 +42,19 @@ impl Args {
         .syntax_highlight()
     }
 
-    pub fn param(&'_ self) -> Param<'_> {
-        Param {
+    pub fn param(&'_ self) -> Result<Param<'_>, Error> {
+        if self.command.is_empty() {
+            return Err(Error::MissingProgram);
+        }
+
+        Ok(Param {
             program: self.command[0].as_os_str(),
             arguments: &self.command[1..],
             prompt: self.prompt.as_str(),
             skip_exec: self.skip_exec,
             support_github_action: self.github_actions,
             syntax_highlight: self.syntax_highlight(),
-        }
+        })
     }
 }
 
