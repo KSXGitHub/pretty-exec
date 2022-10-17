@@ -38,7 +38,12 @@ pub struct Args {
 
 impl Args {
     pub fn syntax_highlight(&self) -> SyntaxHighLight {
-        ColorMode::new(self.color, self.github_actions, stderr().is_terminal()).syntax_highlight()
+        ColorMode::new(
+            self.color,
+            || self.github_actions,
+            || stderr().is_terminal(),
+        )
+        .syntax_highlight()
     }
 
     pub fn param(&'_ self) -> Param<'_> {
@@ -62,14 +67,18 @@ enum ColorMode {
 }
 
 impl ColorMode {
-    fn new(color: When, github_actions: bool, is_terminal: bool) -> Self {
+    fn new(
+        color: When,
+        github_actions: impl FnOnce() -> bool,
+        is_terminal: impl FnOnce() -> bool,
+    ) -> Self {
         match color {
             When::Never => return ColorMode::Colorless,
             When::Always => return ColorMode::Colorful,
             When::Auto => {}
         }
 
-        if github_actions || is_terminal {
+        if github_actions() || is_terminal() {
             return ColorMode::Colorful;
         }
 
@@ -107,7 +116,7 @@ mod test_color_mode {
             .multi_cartesian_product()
             .map(|indices| (indices[0], indices[1], indices[2]))
             .map(|(i, j, k)| (color[i], github_actions[j], is_terminal[k]))
-            .map(|(a, b, c)| ((a, b, c), ColorMode::new(a, b, c)))
+            .map(|(a, b, c)| ((a, b, c), ColorMode::new(a, || b, || c)))
             .collect();
         dbg!(&received);
 
