@@ -15,7 +15,7 @@ _pretty-exec() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" \
-'--prompt=[Customize the prompt before the command]:PROMPT: ' \
+'--prompt=[Customize the prompt before the command]:prompt: ' \
 '--color=[When to use color]:color:(auto never always)' \
 '--skip-exec[Do not execute, print command only]' \
 '--github-actions[Enable GitHub Action grouping]' \

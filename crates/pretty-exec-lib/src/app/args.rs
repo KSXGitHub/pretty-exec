@@ -16,7 +16,7 @@ pub struct Args {
     command: Vec<OsString>,
 
     /// Customize the prompt before the command.
-    #[clap(long, default_value = "$")]
+    #[clap(long, name = "prompt", default_value = "$")]
     prompt: String,
 
     /// Do not execute, print command only
