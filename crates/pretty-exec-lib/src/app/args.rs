@@ -4,7 +4,7 @@ pub use when::When;
 
 use super::super::log::syntax_highlight::SyntaxHighLight;
 use super::Param;
-use clap::Parser;
+use clap::{Parser, ValueHint};
 use is_terminal::IsTerminal;
 use std::{ffi::OsString, io::stderr};
 
@@ -12,11 +12,11 @@ use std::{ffi::OsString, io::stderr};
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
 pub struct Args {
     /// Program to execute
-    #[clap(name = "program")]
+    #[clap(name = "program", value_hint = ValueHint::CommandName)]
     program: OsString,
 
     /// Arguments to pass to program
-    #[clap(name = "arguments")]
+    #[clap(name = "arguments", value_hint = ValueHint::Unknown)]
     arguments: Vec<OsString>,
 
     /// Customize the prompt before the command.
