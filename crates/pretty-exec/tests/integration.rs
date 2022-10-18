@@ -26,6 +26,21 @@ fn expected_colorful_title() -> String {
 }
 
 #[test]
+fn missing_program() {
+    let output = exe().output().unwrap();
+
+    let expected_stdout = String::new();
+    let expected_stderr = "ERROR: Program is not specified\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
+#[test]
 fn color_always() {
     let output = exe()
         .arg("--color=always")

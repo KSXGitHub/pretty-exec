@@ -15,16 +15,15 @@ _pretty-exec() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" \
-'--prompt=[Customize the prompt before the command]:PROMPT: ' \
+'--prompt=[Customize the prompt before the command]:prompt: ' \
 '--color=[When to use color]:color:(auto never always)' \
+'--skip-exec[Do not execute, print command only]' \
+'--github-actions[Enable GitHub Action grouping]' \
 '-h[Print help information]' \
 '--help[Print help information]' \
 '-V[Print version information]' \
 '--version[Print version information]' \
-'--skip-exec[Do not execute, print command only]' \
-'--github-actions[Enable GitHub Action grouping]' \
-':program -- Program to execute:' \
-'*::arguments -- Arguments to pass to program:' \
+'*::command -- Command to execute:_cmdambivalent' \
 && ret=0
 }
 

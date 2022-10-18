@@ -21,7 +21,7 @@ pub struct Param<'a> {
 
 pub fn main() -> Result<i32, Error> {
     let args = args::Args::parse();
-    let param = args.param();
+    let param = args.param()?;
 
     if param.skip_exec {
         print_title::print_title(param);

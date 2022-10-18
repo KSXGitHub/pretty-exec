@@ -2,25 +2,21 @@ pub mod when;
 
 pub use when::When;
 
-use super::super::log::syntax_highlight::SyntaxHighLight;
+use super::super::{error::Error, log::syntax_highlight::SyntaxHighLight};
 use super::Param;
-use clap::Parser;
+use clap::{Parser, ValueHint};
 use is_terminal::IsTerminal;
 use std::{ffi::OsString, io::stderr};
 
 #[derive(Parser)]
 #[clap(name = "pretty-exec", rename_all = "kebab", version)]
 pub struct Args {
-    /// Program to execute
-    #[clap(name = "program")]
-    program: OsString,
-
-    /// Arguments to pass to program
-    #[clap(name = "arguments")]
-    arguments: Vec<OsString>,
+    /// Command to execute
+    #[clap(name = "command", value_hint = ValueHint::CommandWithArguments, trailing_var_arg = true)]
+    command: Vec<OsString>,
 
     /// Customize the prompt before the command.
-    #[clap(long, default_value = "$")]
+    #[clap(long, name = "prompt", default_value = "$")]
     prompt: String,
 
     /// Do not execute, print command only
@@ -38,18 +34,27 @@ pub struct Args {
 
 impl Args {
     pub fn syntax_highlight(&self) -> SyntaxHighLight {
-        ColorMode::new(self.color, self.github_actions, stderr().is_terminal()).syntax_highlight()
+        ColorMode::new(
+            self.color,
+            || self.github_actions,
+            || stderr().is_terminal(),
+        )
+        .syntax_highlight()
     }
 
-    pub fn param(&'_ self) -> Param<'_> {
-        Param {
-            program: self.program.as_os_str(),
-            arguments: self.arguments.as_slice(),
+    pub fn param(&'_ self) -> Result<Param<'_>, Error> {
+        if self.command.is_empty() {
+            return Err(Error::MissingProgram);
+        }
+
+        Ok(Param {
+            program: self.command[0].as_os_str(),
+            arguments: &self.command[1..],
             prompt: self.prompt.as_str(),
             skip_exec: self.skip_exec,
             support_github_action: self.github_actions,
             syntax_highlight: self.syntax_highlight(),
-        }
+        })
     }
 }
 
@@ -62,14 +67,18 @@ enum ColorMode {
 }
 
 impl ColorMode {
-    fn new(color: When, github_actions: bool, is_terminal: bool) -> Self {
+    fn new(
+        color: When,
+        github_actions: impl FnOnce() -> bool,
+        is_terminal: impl FnOnce() -> bool,
+    ) -> Self {
         match color {
             When::Never => return ColorMode::Colorless,
             When::Always => return ColorMode::Colorful,
             When::Auto => {}
         }
 
-        if github_actions || is_terminal {
+        if github_actions() || is_terminal() {
             return ColorMode::Colorful;
         }
 
@@ -107,7 +116,7 @@ mod test_color_mode {
             .multi_cartesian_product()
             .map(|indices| (indices[0], indices[1], indices[2]))
             .map(|(i, j, k)| (color[i], github_actions[j], is_terminal[k]))
-            .map(|(a, b, c)| ((a, b, c), ColorMode::new(a, b, c)))
+            .map(|(a, b, c)| ((a, b, c), ColorMode::new(a, || b, || c)))
             .collect();
         dbg!(&received);
 
