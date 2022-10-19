@@ -1,7 +1,6 @@
-pub use nu_ansi_term as ansi_term;
+pub use yansi;
 
 use super::{Log, Logger};
-use nu_ansi_term::{Color, Style};
 use pipe_trait::Pipe;
 use shell_escape::unix::escape;
 use std::{
@@ -10,6 +9,7 @@ use std::{
     fmt::{self, Display, Formatter},
 };
 use typed_builder::TypedBuilder;
+use yansi::{Color, Style};
 
 #[must_use]
 #[derive(Default, TypedBuilder)]
@@ -33,10 +33,10 @@ impl SyntaxHighLight {
 
     pub fn colorful() -> Self {
         SyntaxHighLight::builder()
-            .prompt(Style::new().dimmed())
-            .program(Color::Green.into())
-            .short_flag(Color::Red.into())
-            .long_flag(Color::Red.into())
+            .prompt(Style::default().dimmed())
+            .program(Style::new(Color::Green))
+            .short_flag(Style::new(Color::Red))
+            .long_flag(Style::new(Color::Red))
             .build()
     }
 }

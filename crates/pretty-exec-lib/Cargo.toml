@@ -11,7 +11,7 @@ readme = "README.md"
 
 [dependencies]
 is-terminal = "^0.3.0"
-nu-ansi-term = "^0.46.0"
+yansi = "^0.5.1"
 shell-escape = "^0.1.5"
 derive_more = "^0.99.17"
 typed-builder = "^0.10.0"
