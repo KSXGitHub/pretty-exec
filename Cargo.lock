@@ -225,16 +225,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3e2e65a1a2e43cfcb47a895c4c8b10d1f4a61097f9f254f183aee60cad9c651d"
 
 [[package]]
-name = "nu-ansi-term"
-version = "0.46.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77a8165726e8236064dbb45459242600304b42a5ea24ee2948e18e023bf7ba84"
-dependencies = [
- "overload",
- "winapi",
-]
-
-[[package]]
 name = "once_cell"
 version = "1.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -256,12 +246,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "overload"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
-
-[[package]]
 name = "pipe-trait"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -271,12 +255,12 @@ checksum = "c1be1ec9e59f0360aefe84efa6f699198b685ab0d5718081e9f72aa2344289e2"
 name = "pretty-exec"
 version = "0.3.0"
 dependencies = [
- "nu-ansi-term",
  "pipe-trait",
  "pretty-exec-lib",
  "serde",
  "serde_json",
  "toml",
+ "yansi",
 ]
 
 [[package]]
@@ -289,12 +273,12 @@ dependencies = [
  "is-terminal",
  "itertools",
  "maplit",
- "nu-ansi-term",
  "pipe-trait",
  "pretty_assertions",
  "shell-escape",
  "thiserror",
  "typed-builder",
+ "yansi",
 ]
 
 [[package]]
