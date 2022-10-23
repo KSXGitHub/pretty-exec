@@ -4,7 +4,7 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum Error {
     #[error("Program is not specified")]
-    MissingProgram,
+    ProgramNotSpecified,
     #[error("Failed to get status code")]
     StatusCodeAcquisitionFailure,
     #[error("Failed to spawn subprocess: {}", _0)]

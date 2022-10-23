@@ -44,7 +44,7 @@ impl Args {
 
     pub fn param(&'_ self) -> Result<Param<'_>, Error> {
         if self.command.is_empty() {
-            return Err(Error::MissingProgram);
+            return Err(Error::ProgramNotSpecified);
         }
 
         Ok(Param {

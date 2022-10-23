@@ -26,7 +26,7 @@ fn expected_colorful_title() -> String {
 }
 
 #[test]
-fn missing_program() {
+fn program_not_specified() {
     let output = exe().output().unwrap();
 
     let expected_stdout = String::new();
