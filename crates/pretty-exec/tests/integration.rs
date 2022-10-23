@@ -40,6 +40,22 @@ fn missing_program() {
     );
 }
 
+#[cfg(unix)]
+#[test]
+fn program_not_exist() {
+    let output = exe().arg("program that does not exist").output().unwrap();
+
+    let expected_stdout = String::new();
+    let expected_stderr = "$ 'program that does not exist'\nERROR: Failed to spawn subprocess: No such file or directory (os error 2)\n".to_string();
+    let actual_stderr = u8v_to_utf8(&output.stderr);
+    let actual_stdout = u8v_to_utf8(&output.stdout);
+
+    assert_eq!(
+        (actual_stderr, actual_stdout),
+        (expected_stderr, expected_stdout),
+    );
+}
+
 #[test]
 fn color_always() {
     let output = exe()
