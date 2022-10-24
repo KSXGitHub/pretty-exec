@@ -1,13 +1,12 @@
-use derive_more::From;
 use std::io;
 use thiserror::Error;
 
-#[derive(Debug, From, Error)]
+#[derive(Debug, Error)]
 pub enum Error {
     #[error("Program is not specified")]
-    MissingProgram,
+    ProgramNotSpecified,
     #[error("Failed to get status code")]
     StatusCodeAcquisitionFailure,
-    #[error("{}", _0)]
-    IoError(io::Error),
+    #[error("Failed to spawn subprocess: {}", _0)]
+    ExecutionError(io::Error),
 }

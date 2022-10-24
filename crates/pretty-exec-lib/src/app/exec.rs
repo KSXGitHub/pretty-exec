@@ -11,12 +11,14 @@ pub fn exec(param: Param) -> Result<ExitStatus, Error> {
     } = param;
     let pretty_exec = PrettyExec::new(prompt, program, arguments);
 
-    Ok(if support_github_action {
+    let exec_result = if support_github_action {
         pretty_exec
             .set_log_before(github_actions::GroupOpening::from(syntax_highlight))
             .set_log_after(github_actions::GroupClosing)
-            .spawn()?
+            .spawn()
     } else {
-        pretty_exec.set_log_before(syntax_highlight).spawn()?
-    })
+        pretty_exec.set_log_before(syntax_highlight).spawn()
+    };
+
+    exec_result.map_err(Error::ExecutionError)
 }
