@@ -29,6 +29,6 @@ path = "../pretty-exec-lib"
 [dev-dependencies]
 yansi = "^0.5.1"
 toml = "^0.5.9"
-serde_json = "^1.0.86"
+serde_json = "^1.0.87"
 pipe-trait = "^0.4.0"
 serde = { version = "^1.0.147", features = ["derive"] }
