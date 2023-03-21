@@ -10,7 +10,7 @@ repository = "https://github.com/KSXGitHub/pretty-exec.git"
 readme = "README.md"
 
 [dependencies]
-is-terminal = "^0.4.4"
+is-terminal = "^0.4.5"
 yansi = "^0.5.1"
 shell-escape = "^0.1.5"
 derive_more = "^0.99.17"
